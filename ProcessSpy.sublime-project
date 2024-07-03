@@ -2,7 +2,19 @@
 	"folders":
 	[
 		{
-			"path": "."
-		}
+			"path": ".",
+			"folder_exclude_patterns": [
+				"engine/template",
+				"engine/playdate_template",
+				"engine/platform/web",
+				"engine/platform/playdate",
+				"engine/platform/osx",
+				"engine/platform/linux",
+				"lib/include",
+			],
+		},
+		{
+			"path": "lib/include/gylib",
+		},
 	]
 }
