@@ -22,7 +22,7 @@ Description:
 #define GAME_THREAD_SCRATCH_NUM_MARKS        32 //marks
 #define GAME_SETTINGS_FILE_NAME              "settings.txt"
 #define GAME_DBG_BINDINGS_FILE_NAME          "debug_bindings.txt"
-#define GAME_INITIAL_APP_STATE               AppState_MainMenu
+#define GAME_INITIAL_APP_STATE               AppState_Main
 
 #define GAME_DEFAULT_MASTER_VOLUME     0.8f
 #define GAME_DEFAULT_MUSIC_VOLUME      1.0f

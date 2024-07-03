@@ -5,7 +5,7 @@ rem The "Safe" name doesn't have spaces or invalid characters and also doesn't c
 set ProjectName=Process Spy
 set ProjectNameSafe=ProcessSpy
 
-set CompilePlatform=1
+set CompilePlatform=0
 set CompileEngine=1
 set CompileInstaller=0
 set DumpPreprocessor=0

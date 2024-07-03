@@ -9,12 +9,12 @@ Description:
 #ifndef _GAME_RESOURCES_H
 #define _GAME_RESOURCES_H
 
-#define RESOURCES_NUM_TEXTURES    14
+#define RESOURCES_NUM_TEXTURES    9
 #define RESOURCES_NUM_VECTORS     1
-#define RESOURCES_NUM_SHEETS      3
+#define RESOURCES_NUM_SHEETS      2
 #define RESOURCES_NUM_SHADERS     11
 #define RESOURCES_NUM_FONTS       4
-#define RESOURCES_NUM_SOUNDS      3
+#define RESOURCES_NUM_SOUNDS      1
 #define RESOURCES_NUM_MUSICS      1
 #define RESOURCES_NUM_MODELS      1
 #define TOTAL_NUM_RESOURCES       (RESOURCES_NUM_TEXTURES + RESOURCES_NUM_VECTORS + RESOURCES_NUM_SHEETS + RESOURCES_NUM_SHADERS + RESOURCES_NUM_FONTS + RESOURCES_NUM_SOUNDS + RESOURCES_NUM_MUSICS + RESOURCES_NUM_MODELS)
@@ -41,11 +41,7 @@ union ATTR_PACKED ResourceTextures_t
 	Texture_t items[RESOURCES_NUM_TEXTURES];
 	struct
 	{
-		Texture_t piggybank;
-		Texture_t piggyLoading;
-		Texture_t piggyBlob;
 		Texture_t gifRecording;
-		Texture_t madeInPigEngine;
 		Texture_t alpha;
 		Texture_t defaultPink;
 		Texture_t defaultBlue;
@@ -54,8 +50,6 @@ union ATTR_PACKED ResourceTextures_t
 		Texture_t defaultRed;
 		Texture_t defaultYellow;
 		Texture_t blueGradientBack;
-		
-		Texture_t mainMenuBackground;
 	};
 };
 union ATTR_PACKED ResourceVectors_t
@@ -63,7 +57,7 @@ union ATTR_PACKED ResourceVectors_t
 	VectorImg_t items[RESOURCES_NUM_VECTORS];
 	struct
 	{
-		VectorImg_t test;
+		VectorImg_t placeholder;
 	};
 };
 union ATTR_PACKED ResourceSheets_t
@@ -71,7 +65,6 @@ union ATTR_PACKED ResourceSheets_t
 	SpriteSheet_t items[RESOURCES_NUM_SHEETS];
 	struct
 	{
-		SpriteSheet_t pigAnim;
 		SpriteSheet_t vectorIcons64;
 		SpriteSheet_t controllerBtns;
 	};
@@ -111,8 +104,6 @@ union ATTR_PACKED ResourceSounds_t
 	struct
 	{
 		Sound_t notification;
-		Sound_t oink;
-		Sound_t click1;
 	};
 };
 union ATTR_PACKED ResourceMusics_t
@@ -120,7 +111,7 @@ union ATTR_PACKED ResourceMusics_t
 	Sound_t items[RESOURCES_NUM_MUSICS];
 	struct
 	{
-		Sound_t testMusic;
+		Sound_t placeholder;
 	};
 };
 union ATTR_PACKED ResourceModels_t
@@ -128,7 +119,7 @@ union ATTR_PACKED ResourceModels_t
 	Model_t items[RESOURCES_NUM_MODELS];
 	struct
 	{
-		Model_t testModel;
+		Model_t placeholder;
 	};
 };
 END_PACK()
@@ -147,21 +138,15 @@ const char* Resources_GetPathForTexture(u64 textureIndex, ResourceTextureMetaInf
 	switch (textureIndex)
 	{
 		//                            pixelated repeating     folder               filename
-		case 0:  NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_piggybank.png");             //| piggybank        |
-		case 1:  NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_loading_image.png");         //| piggyLoading     |
-		case 2:  NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_piggyblob.png");             //| piggyBlob        |
-		case 3:  NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_gif_recording.png");         //| gifRecording     |
-		case 4:  NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_made_in_pig_engine.png");    //| madeInPigEngine  |
-		case 5:  NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_alpha.png");                 //| alpha            |
-		case 6:  NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid.png");               //| defaultPink      |
-		case 7:  NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_blue.png");          //| defaultBlue      |
-		case 8:  NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_green.png");         //| defaultGreen     |
-		case 9:  NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_purple.png");        //| defaultPurple    |
-		case 10: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_red.png");           //| defaultRed       |
-		case 11: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_yellow.png");        //| defaultYellow    |
-		case 12: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_blue_gradient.png");         //| blueGradientBack |
-		
-		case 13: NORMAL_TEXTURE_META_INFO(true, false,  SPRITES,  "main_menu.png");                 //| mainMenuBackground |
+		case 0: NORMAL_TEXTURE_META_INFO(true,  false, SPRITES,  "pig_gif_recording.png");         //| gifRecording     |
+		case 1: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_alpha.png");                 //| alpha            |
+		case 2: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid.png");               //| defaultPink      |
+		case 3: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_blue.png");          //| defaultBlue      |
+		case 4: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_green.png");         //| defaultGreen     |
+		case 5: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_purple.png");        //| defaultPurple    |
+		case 6: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_red.png");           //| defaultRed       |
+		case 7: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_invalid_yellow.png");        //| defaultYellow    |
+		case 8: NORMAL_TEXTURE_META_INFO(true,  true,  TEXTURES, "pig_blue_gradient.png");         //| blueGradientBack |
 		
 		default: DebugAssert(false); return nullptr;
 	}
@@ -175,7 +160,7 @@ const char* Resources_GetPathForVectorImg(u64 vectorImgIndex)
 {
 	switch (vectorImgIndex)
 	{
-		case 0: return RESOURCE_FOLDER_VECTOR  "/test.svg";             //| test           |
+		case 0: return RESOURCE_FOLDER_VECTOR  "/i_dont_exist.svg"; //| placeholder |
 		default: DebugAssert(false); return nullptr;
 	}
 }
@@ -194,17 +179,9 @@ const char* Resources_GetPathForSheet(u64 sheetIndex, ResourceSheetMetaInfo_t* m
 	switch (sheetIndex)
 	{
 		// +==============================+
-		// |           pigAnim            |
-		// +==============================+
-		case 0:
-		{
-			metaInfo->numFrames = NewVec2i(4, 1);
-			return RESOURCE_FOLDER_SHEETS "/pig_anim.png";
-		} break;
-		// +==============================+
 		// |        vectorIcons64         |
 		// +==============================+
-		case 1:
+		case 0:
 		{
 			metaInfo->numFrames = NewVec2i(4, 4);
 			metaInfo->metaFilePath = NewStr(RESOURCE_FOLDER_SHEETS "/pig_vector_icons64.meta");
@@ -214,7 +191,7 @@ const char* Resources_GetPathForSheet(u64 sheetIndex, ResourceSheetMetaInfo_t* m
 		// +==============================+
 		// |        controllerBtns        |
 		// +==============================+
-		case 2:
+		case 1:
 		{
 			metaInfo->numFrames = NewVec2i(2, 2);
 			metaInfo->pixelated = false;
@@ -227,10 +204,8 @@ const char* GetResourceSheetName(u64 sheetIndex)
 {
 	switch (sheetIndex)
 	{
-		case 0: return "pigAnim";
-		case 1: return "vectorIcons64";
-		case 2: return "controllerBtns";
-		case 3: return "parts";
+		case 0: return "vectorIcons64";
+		case 1: return "controllerBtns";
 		default: return "Unknown";
 	}
 }
@@ -502,8 +477,6 @@ const char* Resources_GetPathForSound(u64 soundIndex)
 	switch (soundIndex)
 	{
 		case 0:  return RESOURCE_FOLDER_SOUNDS "/pig_notification.ogg"; // | notification |
-		case 1:  return RESOURCE_FOLDER_SOUNDS "/pig_oink.ogg";         // | oink         |
-		case 2:  return RESOURCE_FOLDER_SOUNDS "/pig_click1.ogg";       // | click1       |
 		default: DebugAssert(false); return nullptr;
 	}
 }
@@ -515,7 +488,7 @@ const char* Resources_GetPathForMusic(u64 musicIndex)
 {
 	switch (musicIndex)
 	{
-		case 0: return RESOURCE_FOLDER_MUSIC "/test.ogg"; // | testMusic |
+		case 0: return RESOURCE_FOLDER_MUSIC "/i_dont_exist.ogg"; // | placeholder |
 		default: DebugAssert(false); return nullptr;
 	}
 }
@@ -533,13 +506,13 @@ const char* Resources_GetPathForModel(u64 musicIndex, ResourceModelMetaInfo_t* m
 	switch (musicIndex)
 	{
 		// +==============================+
-		// |          testModel           |
+		// |         placeholder          |
 		// +==============================+
 		case 0:
 		{
 			metaInfo->textureType = ModelTextureType_FromModelsFolder;
 			metaInfo->flipUvY = true;
-			return RESOURCE_FOLDER_MODELS "/test.obj";
+			return RESOURCE_FOLDER_MODELS "/i_dont_exist.obj";
 		} break;
 		default: DebugAssert(false); return nullptr;
 	}

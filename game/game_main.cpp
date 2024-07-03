@@ -9,7 +9,7 @@ Description:
 #include "app_func_defs.h"
 #include "game_startup_options.cpp"
 
-#include "main_menu/main_menu_state.cpp"
+#include "main_menu/main_state.cpp"
 #include "app_state_list.cpp"
 
 #include "game_settings.cpp"
@@ -42,15 +42,15 @@ void GameAllocateAppStateStructs(AppStateStructs_t* appStateStructs) //pre-decla
 		ClearPointer(appStateStructs->pntrVar);                             \
 	} while(0)
 	
-	ALLOCATE_APP_STATE_STRUCT_CODE(MainMenuAppState_t, mainMenuAppStateSize, mainMenuAppStatePntr);
+	ALLOCATE_APP_STATE_STRUCT_CODE(MainAppState_t, mainAppStateSize, mainAppStatePntr);
 	
 	#undef ALLOCATE_APP_STATE_STRUCT_CODE
 }
 
 void GameUpdateGlobals() //pre-declared in pig_func_defs.h
 {
-	gl    = ((pig != nullptr) ? &pig->appGlobals                          : nullptr);
-	mmenu = ((pig != nullptr) ? pig->appStateStructs.mainMenuAppStatePntr : nullptr);
+	gl   = ((pig != nullptr) ? &pig->appGlobals                      : nullptr);
+	main = ((pig != nullptr) ? pig->appStateStructs.mainAppStatePntr : nullptr);
 }
 
 void GameLoadDebugBindings(PigDebugBindings_t* bindings) //pre-declared in pig_func_defs.h
@@ -124,7 +124,7 @@ void GameHandleReload() //pre-declared in pig_func_defs.h
 		}                                                                                                                                                                                    \
 	} while(0)
 	
-	RELOAD_APP_STATE_STRUCT_CODE(MainMenuAppState_t, mainMenuAppStateSize, mainMenuAppStatePntr);
+	RELOAD_APP_STATE_STRUCT_CODE(MainAppState_t, mainAppStateSize, mainAppStatePntr);
 	
 	#undef RELOAD_APP_STATE_STRUCT_CODE
 }

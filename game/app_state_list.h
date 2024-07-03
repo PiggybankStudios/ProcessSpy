@@ -11,7 +11,7 @@ NOTE: This file gets included by pig_main.cpp
 enum AppState_t
 {
 	AppState_None = 0,
-	AppState_MainMenu,
+	AppState_Main,
 	AppState_NumStates,
 };
 
@@ -19,8 +19,8 @@ const char* GetAppStateStr(AppState_t appState)
 {
 	switch (appState)
 	{
-		case AppState_None:        return "None";
-		case AppState_MainMenu:    return "MainMenu";
+		case AppState_None: return "None";
+		case AppState_Main: return "Main";
 		default: return "Unknown";
 	}
 }

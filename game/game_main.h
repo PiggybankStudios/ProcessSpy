@@ -15,15 +15,15 @@ Description:
 #include "game_tasks.h"
 
 #include "app_state_list.h"
-#include "main_menu/main_menu_state.h"
+#include "main_menu/main_state.h"
 
 // +--------------------------------------------------------------+
 // |                           Globals                            |
 // +--------------------------------------------------------------+
 struct AppStateStructs_t
 {
-	u64 mainMenuAppStateSize;
-	MainMenuAppState_t* mainMenuAppStatePntr;
+	u64 mainAppStateSize;
+	MainAppState_t* mainAppStatePntr;
 };
 
 struct AppGlobals_t
@@ -31,8 +31,8 @@ struct AppGlobals_t
 	bool placeholder; //TODO: Remove me!
 };
 
-static AppGlobals_t*          gl        = nullptr;
-static MainMenuAppState_t*    mmenu     = nullptr;
+static AppGlobals_t*   gl   = nullptr;
+static MainAppState_t* main = nullptr;
 
 //game_debug_commands.cpp
 ResourcePool_t* GameGetCurrentResourcePool();

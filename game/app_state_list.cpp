@@ -12,7 +12,7 @@ void StartAppState(AppState_t appState, AppState_t oldAppState, bool initialize)
 {
 	switch (appState)
 	{
-		case AppState_MainMenu: StartMainMenuAppState(oldAppState, initialize); break;
+		case AppState_Main: StartMainAppState(oldAppState, initialize); break;
 		default: DebugAssert(false); break;
 	}
 }
@@ -21,7 +21,7 @@ void StopAppState(AppState_t appState, AppState_t newAppState, bool deinitialize
 {
 	switch (appState)
 	{
-		case AppState_MainMenu: StopMainMenuAppState(newAppState, deinitialize, shuttingDown); break;
+		case AppState_Main: StopMainAppState(newAppState, deinitialize, shuttingDown); break;
 		default: DebugAssert(false); break;
 	}
 }
@@ -30,7 +30,7 @@ void UpdateAppState(AppState_t appState)
 {
 	switch (appState)
 	{
-		case AppState_MainMenu: UpdateMainMenuAppState(); break;
+		case AppState_Main: UpdateMainAppState(); break;
 		default: DebugAssert(false); break;
 	}
 }
@@ -39,7 +39,7 @@ void RenderAppState(AppState_t appState, FrameBuffer_t* renderBuffer, bool botto
 {
 	switch (appState)
 	{
-		case AppState_MainMenu: RenderMainMenuAppState(renderBuffer, bottomLayer); break;
+		case AppState_Main: RenderMainAppState(renderBuffer, bottomLayer); break;
 		default: DebugAssert(false); break;
 	}
 }
