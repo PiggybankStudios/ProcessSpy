@@ -1,0 +1,1040 @@
+# Sprite Meta
+// January 20th 2022
+
+(1, 0)
+	Codepoint: 0x00000001
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 7)
+(2, 0)
+	Codepoint: 0x00000002
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 7)
+(3, 0)
+	Codepoint: 0x00000003
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+(4, 0)
+	Codepoint: 0x00000004
+	AdvanceX: 7
+	CharBounds: (0, 2, 6, 5)
+(5, 0)
+	Codepoint: 0x00000005
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 6)
+(6, 0)
+	Codepoint: 0x00000006
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 6)
+(7, 0)
+	Codepoint: 0x00000007
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 4)
+(8, 0)
+	Codepoint: 0x00000008
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 6)
+(9, 0)
+	Codepoint: 0x00000009
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 6)
+(10, 0)
+	Codepoint: 0x0000000A
+	AdvanceX: 7
+	CharBounds: (0, 1, 6, 6)
+(11, 0)
+	Codepoint: 0x0000000B
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 6)
+(12, 0)
+	Codepoint: 0x0000000C
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(13, 0)
+	Codepoint: 0x0000000D
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(14, 0)
+	Codepoint: 0x0000000E
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(15, 0)
+	Codepoint: 0x0000000F
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+(0, 1)
+	Codepoint: 0x00000010
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 1)
+	Codepoint: 0x00000011
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(2, 1)
+	Codepoint: 0x00000012
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 1)
+	Codepoint: 0x00000013
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(4, 1)
+	Codepoint: 0x00000014
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 1)
+	Codepoint: 0x00000015
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 1)
+	Codepoint: 0x00000016
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 3)
+(7, 1)
+	Codepoint: 0x00000017
+	AdvanceX: 4
+	CharBounds: (1, 2, 3, 6)
+(8, 1)
+	Codepoint: 0x00000018
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 1)
+	Codepoint: 0x00000019
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(10, 1)
+	Codepoint: 0x0000001A
+	AdvanceX: 7
+	CharBounds: (0, 2, 6, 5)
+(11, 1)
+	Codepoint: 0x0000001B
+	AdvanceX: 7
+	CharBounds: (0, 2, 6, 5)
+(12, 1)
+	Codepoint: 0x0000001C
+	AdvanceX: 5
+	CharBounds: (0, 1, 4, 4)
+(14, 1)
+	Codepoint: 0x0000001D
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 6)
+(15, 1)
+	Codepoint: 0x0000001E
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 6)
+(0, 2)
+	Codepoint: 0x00000020
+	AdvanceX: 5
+(1, 2)
+	Codepoint: 0x00000021 //!
+	AdvanceX: 3
+	CharBounds: (2, 1, 1, 7)
+	CharOffset: (1, 0)
+(2, 2)
+	Codepoint: 0x00000022 //"
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 3)
+	CharOffset: (0, -5)
+(3, 2)
+	Codepoint: 0x00000023 //#
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+	CharOffset: (0, -2)
+(4, 2)
+	Codepoint: 0x00000024 //$
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 2)
+	Codepoint: 0x00000025 //%
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 2)
+	Codepoint: 0x00000026 //&
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(7, 2)
+	Codepoint: 0x00000027 //'
+	AdvanceX: 3
+	CharBounds: (1, 1, 2, 3)
+	CharOffset: (0, -5)
+(8, 2)
+	Codepoint: 0x00000028 //(
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(9, 2)
+	Codepoint: 0x00000029 //)
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(10, 2)
+	Codepoint: 0x0000002A //*
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+	CharOffset: (0, -2)
+(11, 2)
+	Codepoint: 0x0000002B //+
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+	CharOffset: (0, -1)
+(12, 2)
+	Codepoint: 0x0000002C //,
+	AdvanceX: 3
+	CharBounds: (1, 5, 2, 3)
+	CharOffset: (0, 2)
+(13, 2)
+	Codepoint: 0x0000002D //-
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 1)
+	CharOffset: (0, -3)
+(14, 2)
+	Codepoint: 0x0000002E //.
+	AdvanceX: 4
+	CharBounds: (1, 6, 2, 2)
+(15, 2)
+	Codepoint: 0x0000002F ///
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+	CharOffset: (0, -1)
+(0, 3)
+	Codepoint: 0x00000030 //0
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 3)
+	Codepoint: 0x00000031 //1
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(2, 3)
+	Codepoint: 0x00000032 //2
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 3)
+	Codepoint: 0x00000033 //3
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(4, 3)
+	Codepoint: 0x00000034 //4
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 3)
+	Codepoint: 0x00000035 //5
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 3)
+	Codepoint: 0x00000036 //6
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(7, 3)
+	Codepoint: 0x00000037 //7
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(8, 3)
+	Codepoint: 0x00000038 //8
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 3)
+	Codepoint: 0x00000039 //9
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(10, 3)
+	Codepoint: 0x0000003A //:
+	AdvanceX: 3
+	CharBounds: (2, 3, 1, 4)
+	CharOffset: (1, -2)
+(11, 3)
+	Codepoint: 0x0000003B //;
+	AdvanceX: 3
+	CharBounds: (2, 3, 1, 5)
+	CharOffset: (1, -1)
+(12, 3)
+	Codepoint: 0x0000003C //<
+	AdvanceX: 4
+	CharBounds: (1, 2, 3, 5)
+	CharOffset: (0, -1)
+(13, 3)
+	Codepoint: 0x0000003D //=
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 3)
+	CharOffset: (0, -2)
+(14, 3)
+	Codepoint: 0x0000003E //>
+	AdvanceX: 4
+	CharBounds: (1, 2, 3, 5)
+	CharOffset: (0, -1)
+(15, 3)
+	Codepoint: 0x0000003F //?
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+	CharOffset: (0, -1)
+(0, 4)
+	Codepoint: 0x00000040 //@
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 4)
+	Codepoint: 0x00000041 //A
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(2, 4)
+	Codepoint: 0x00000042 //B
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 4)
+	Codepoint: 0x00000043 //C
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(4, 4)
+	Codepoint: 0x00000044 //D
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 4)
+	Codepoint: 0x00000045 //E
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 4)
+	Codepoint: 0x00000046 //F
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(7, 4)
+	Codepoint: 0x00000047 //G
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(8, 4)
+	Codepoint: 0x00000048 //H
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 4)
+	Codepoint: 0x00000049 //I
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(10, 4)
+	Codepoint: 0x0000004A //J
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(11, 4)
+	Codepoint: 0x0000004B //K
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(12, 4)
+	Codepoint: 0x0000004C //L
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(13, 4)
+	Codepoint: 0x0000004D //M
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(14, 4)
+	Codepoint: 0x0000004E //N
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(15, 4)
+	Codepoint: 0x0000004F //O
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(0, 5)
+	Codepoint: 0x00000050 //P
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 5)
+	Codepoint: 0x00000051 //Q
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(2, 5)
+	Codepoint: 0x00000052 //R
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 5)
+	Codepoint: 0x00000053 //S
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(4, 5)
+	Codepoint: 0x00000054 //T
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 5)
+	Codepoint: 0x00000055 //U
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 5)
+	Codepoint: 0x00000056 //V
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(7, 5)
+	Codepoint: 0x00000057 //W
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(8, 5)
+	Codepoint: 0x00000058 //X
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 5)
+	Codepoint: 0x00000059 //Y
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(10, 5)
+	Codepoint: 0x0000005A //Z
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(11, 5)
+	Codepoint: 0x0000005B //[
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(12, 5)
+	Codepoint: 0x0000005C //\
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+	CharOffset: (0, -1)
+(13, 5)
+	Codepoint: 0x0000005D //]
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(14, 5)
+	Codepoint: 0x0000005E //^
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 3)
+	CharOffset: (0, -5)
+(15, 5)
+	Codepoint: 0x0000005F //_
+	AdvanceX: 6
+	CharBounds: (0, 7, 5, 1)
+	CharOffset: (0, 1)
+(0, 6)
+	Codepoint: 0x00000060 //`
+	AdvanceX: 3
+	CharBounds: (1, 1, 2, 2)
+	CharOffset: (0, -5)
+(1, 6)
+	Codepoint: 0x00000061 //a
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(2, 6)
+	Codepoint: 0x00000062 //b
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 6)
+	Codepoint: 0x00000063 //c
+	AdvanceX: 5
+	CharBounds: (0, 3, 4, 5)
+(4, 6)
+	Codepoint: 0x00000064 //d
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 6)
+	Codepoint: 0x00000065 //e
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(6, 6)
+	Codepoint: 0x00000066 //f
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(7, 6)
+	Codepoint: 0x00000067 //g
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+	CharOffset: (0, 2)
+(8, 6)
+	Codepoint: 0x00000068 //h
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 6)
+	Codepoint: 0x00000069 //i
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(10, 6)
+	Codepoint: 0x0000006A //j
+	AdvanceX: 5
+	CharBounds: (0, 0, 4, 8)
+	CharOffset: (0, 1)
+(11, 6)
+	Codepoint: 0x0000006B //k
+	AdvanceX: 5
+	CharBounds: (0, 1, 4, 7)
+(12, 6)
+	Codepoint: 0x0000006C //l
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(13, 6)
+	Codepoint: 0x0000006D //m
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(14, 6)
+	Codepoint: 0x0000006E //n
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(15, 6)
+	Codepoint: 0x0000006F //o
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(0, 7)
+	Codepoint: 0x00000070 //p
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+	CharOffset: (0, 2)
+(1, 7)
+	Codepoint: 0x00000071 //q
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+	CharOffset: (0, 2)
+(2, 7)
+	Codepoint: 0x00000072 //r
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(3, 7)
+	Codepoint: 0x00000073 //s
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(4, 7)
+	Codepoint: 0x00000074 //t
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 7)
+	Codepoint: 0x00000075 //u
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(6, 7)
+	Codepoint: 0x00000076 //v
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(7, 7)
+	Codepoint: 0x00000077 //w
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(8, 7)
+	Codepoint: 0x00000078 //x
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(9, 7)
+	Codepoint: 0x00000079 //y
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+	CharOffset: (0, 2)
+(10, 7)
+	Codepoint: 0x0000007A //z
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(11, 7)
+	Codepoint: 0x0000007B //{
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(12, 7)
+	Codepoint: 0x0000007C //|
+	AdvanceX: 3
+	CharBounds: (2, 0, 1, 8)
+	CharOffset: (1, 0)
+(13, 7)
+	Codepoint: 0x0000007D //}
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 7)
+(14, 7)
+	Codepoint: 0x0000007E //~
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 2)
+	CharOffset: (0, -2)
+(15, 7)
+	Codepoint: 0x0000007F
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(0, 8)
+	Codepoint: 0x00000080
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(1, 8)
+	Codepoint: 0x00000081
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(2, 8)
+	Codepoint: 0x00000082
+	AdvanceX: 7
+	CharBounds: (0, 3, 6, 5)
+(3, 8)
+	Codepoint: 0x00000083
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 4)
+(4, 8)
+	Codepoint: 0x00000084
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(5, 8)
+	Codepoint: 0x00000085
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(6, 8)
+	Codepoint: 0x00000086
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(7, 8)
+	Codepoint: 0x00000087
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(8, 8)
+	Codepoint: 0x00000088
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 7)
+(9, 8)
+	Codepoint: 0x00000089
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(10, 8)
+	Codepoint: 0x0000008A
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(11, 8)
+	Codepoint: 0x0000008B
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(12, 8)
+	Codepoint: 0x0000008C
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(13, 8)
+	Codepoint: 0x0000008D
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(14, 8)
+	Codepoint: 0x0000008E
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(15, 8)
+	Codepoint: 0x0000008F
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(0, 9)
+	Codepoint: 0x00000090
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(1, 9)
+	Codepoint: 0x00000091
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(2, 9)
+	Codepoint: 0x00000092
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 9)
+	Codepoint: 0x00000093
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(4, 9)
+	Codepoint: 0x00000094
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 9)
+	Codepoint: 0x00000095
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(6, 9)
+	Codepoint: 0x00000096
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(7, 9)
+	Codepoint: 0x00000097
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(8, 9)
+	Codepoint: 0x00000098
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 9)
+	Codepoint: 0x00000099
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(10, 9)
+	Codepoint: 0x0000009A
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(11, 9)
+	Codepoint: 0x0000009B
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(12, 9)
+	Codepoint: 0x0000009C
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(13, 9)
+	Codepoint: 0x0000009D
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(14, 9)
+	Codepoint: 0x0000009E
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(15, 9)
+	Codepoint: 0x0000009F
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(0, 10)
+	Codepoint: 0x000000A0
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(1, 10)
+	Codepoint: 0x000000A1
+	AdvanceX: 4
+	CharBounds: (1, 0, 3, 8)
+(2, 10)
+	Codepoint: 0x000000A2
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(3, 10)
+	Codepoint: 0x000000A3
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(4, 10)
+	Codepoint: 0x000000A4
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(5, 10)
+	Codepoint: 0x000000A5
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(6, 10)
+	Codepoint: 0x000000A6
+	AdvanceX: 7
+	CharBounds: (0, 2, 6, 5)
+(7, 10)
+	Codepoint: 0x000000A7
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+(8, 10)
+	Codepoint: 0x000000A8
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(9, 10)
+	Codepoint: 0x000000A9
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 3)
+(10, 10)
+	Codepoint: 0x000000AA
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 3)
+(11, 10)
+	Codepoint: 0x000000AB
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(12, 10)
+	Codepoint: 0x000000AC
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(13, 10)
+	Codepoint: 0x000000AD
+	AdvanceX: 2
+	CharBounds: (2, 1, 1, 7)
+(14, 10)
+	Codepoint: 0x000000AE
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 6)
+(15, 10)
+	Codepoint: 0x000000AF
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 6)
+(0, 11)
+	Codepoint: 0x000000B0
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 11)
+	Codepoint: 0x000000B1
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(2, 11)
+	Codepoint: 0x000000B2
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 11)
+	Codepoint: 0x000000B3
+	AdvanceX: 3
+	CharBounds: (2, 0, 2, 8)
+(4, 11)
+	Codepoint: 0x000000B4
+	AdvanceX: 5
+	CharBounds: (0, 0, 4, 8)
+(5, 11)
+	Codepoint: 0x000000B5
+	AdvanceX: 5
+	CharBounds: (0, 0, 4, 8)
+(6, 11)
+	Codepoint: 0x000000B6
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(7, 11)
+	Codepoint: 0x000000B7
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 4)
+(8, 11)
+	Codepoint: 0x000000B8
+	AdvanceX: 5
+	CharBounds: (0, 3, 4, 5)
+(9, 11)
+	Codepoint: 0x000000B9
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 8)
+(10, 11)
+	Codepoint: 0x000000BA
+	AdvanceX: 5
+	CharBounds: (1, 0, 4, 8)
+(11, 11)
+	Codepoint: 0x000000BB
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(12, 11)
+	Codepoint: 0x000000BC
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 6)
+(13, 11)
+	Codepoint: 0x000000BD
+	AdvanceX: 6
+	CharBounds: (0, 0, 5, 5)
+(14, 11)
+	Codepoint: 0x000000BE
+	AdvanceX: 5
+	CharBounds: (0, 0, 4, 6)
+(15, 11)
+	Codepoint: 0x000000BF
+	AdvanceX: 5
+	CharBounds: (0, 4, 4, 4)
+(0, 12)
+	Codepoint: 0x000000C0
+	AdvanceX: 5
+	CharBounds: (2, 0, 4, 5)
+(1, 12)
+	Codepoint: 0x000000C1
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 5)
+(2, 12)
+	Codepoint: 0x000000C2
+	AdvanceX: 7
+	CharBounds: (0, 4, 6, 4)
+(3, 12)
+	Codepoint: 0x000000C3
+	AdvanceX: 5
+	CharBounds: (2, 0, 4, 8)
+(4, 12)
+	Codepoint: 0x000000C4
+	AdvanceX: 7
+	CharBounds: (0, 4, 6, 1)
+(5, 12)
+	Codepoint: 0x000000C5
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(6, 12)
+	Codepoint: 0x000000C6
+	AdvanceX: 5
+	CharBounds: (2, 0, 4, 8)
+(7, 12)
+	Codepoint: 0x000000C7
+	AdvanceX: 6
+	CharBounds: (1, 0, 5, 8)
+(8, 12)
+	Codepoint: 0x000000C8
+	AdvanceX: 6
+	CharBounds: (1, 0, 5, 6)
+(9, 12)
+	Codepoint: 0x000000C9
+	AdvanceX: 6
+	CharBounds: (1, 3, 5, 5)
+(10, 12)
+	Codepoint: 0x000000CA
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 6)
+(11, 12)
+	Codepoint: 0x000000CB
+	AdvanceX: 7
+	CharBounds: (0, 3, 6, 5)
+(12, 12)
+	Codepoint: 0x000000CC
+	AdvanceX: 6
+	CharBounds: (1, 0, 5, 8)
+(13, 12)
+	Codepoint: 0x000000CD
+	AdvanceX: 7
+	CharBounds: (0, 3, 6, 3)
+(14, 12)
+	Codepoint: 0x000000CE
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(15, 12)
+	Codepoint: 0x000000CF
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 6)
+(0, 13)
+	Codepoint: 0x000000D0
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 5)
+(1, 13)
+	Codepoint: 0x000000D1
+	AdvanceX: 7
+	CharBounds: (0, 3, 6, 5)
+(2, 13)
+	Codepoint: 0x000000D2
+	AdvanceX: 7
+	CharBounds: (0, 4, 6, 4)
+(3, 13)
+	Codepoint: 0x000000D3
+	AdvanceX: 6
+	CharBounds: (1, 0, 5, 5)
+(4, 13)
+	Codepoint: 0x000000D4
+	AdvanceX: 5
+	CharBounds: (2, 0, 4, 6)
+(5, 13)
+	Codepoint: 0x000000D5
+	AdvanceX: 5
+	CharBounds: (2, 3, 4, 5)
+(6, 13)
+	Codepoint: 0x000000D6
+	AdvanceX: 6
+	CharBounds: (1, 4, 5, 4)
+(7, 13)
+	Codepoint: 0x000000D7
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(8, 13)
+	Codepoint: 0x000000D8
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(9, 13)
+	Codepoint: 0x000000D9
+	AdvanceX: 5
+	CharBounds: (0, 0, 4, 5)
+(10, 13)
+	Codepoint: 0x000000DA
+	AdvanceX: 5
+	CharBounds: (2, 4, 4, 4)
+(11, 13)
+	Codepoint: 0x000000DB
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 8)
+(12, 13)
+	Codepoint: 0x000000DC
+	AdvanceX: 7
+	CharBounds: (0, 4, 6, 4)
+(13, 13)
+	Codepoint: 0x000000DD
+	AdvanceX: 4
+	CharBounds: (0, 0, 3, 8)
+(14, 13)
+	Codepoint: 0x000000DE
+	AdvanceX: 4
+	CharBounds: (3, 0, 3, 8)
+(15, 13)
+	Codepoint: 0x000000DF
+	AdvanceX: 7
+	CharBounds: (0, 0, 6, 4)
+(0, 14)
+	Codepoint: 0x000000E0
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 4)
+(1, 14)
+	Codepoint: 0x000000E1
+	AdvanceX: 5
+	CharBounds: (0, 1, 4, 7)
+(2, 14)
+	Codepoint: 0x000000E2
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 14)
+	Codepoint: 0x000000E3
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(4, 14)
+	Codepoint: 0x000000E4
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 14)
+	Codepoint: 0x000000E5
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 6)
+(6, 14)
+	Codepoint: 0x000000E6
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(7, 14)
+	Codepoint: 0x000000E7
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(8, 14)
+	Codepoint: 0x000000E8
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 6)
+(9, 14)
+	Codepoint: 0x000000E9
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(10, 14)
+	Codepoint: 0x000000EA
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(11, 14)
+	Codepoint: 0x000000EB
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(12, 14)
+	Codepoint: 0x000000EC
+	AdvanceX: 6
+	CharBounds: (0, 4, 5, 4)
+(13, 14)
+	Codepoint: 0x000000ED
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(14, 14)
+	Codepoint: 0x000000EE
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(15, 14)
+	Codepoint: 0x000000EF
+	AdvanceX: 6
+	CharBounds: (0, 3, 5, 5)
+(0, 15)
+	Codepoint: 0x000000F0
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(1, 15)
+	Codepoint: 0x000000F1
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(2, 15)
+	Codepoint: 0x000000F2
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(3, 15)
+	Codepoint: 0x000000F3
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(4, 15)
+	Codepoint: 0x000000F4
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(5, 15)
+	Codepoint: 0x000000F5
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(6, 15)
+	Codepoint: 0x000000F6
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+(7, 15)
+	Codepoint: 0x000000F7
+	AdvanceX: 6
+	CharBounds: (0, 2, 5, 5)
+(8, 15)
+	Codepoint: 0x000000F8
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 3)
+(9, 15)
+	Codepoint: 0x000000F9
+	AdvanceX: 4
+	CharBounds: (1, 3, 3, 3)
+(10, 15)
+	Codepoint: 0x000000FA
+	AdvanceX: 2
+	CharBounds: (2, 4, 1, 1)
+(11, 15)
+	Codepoint: 0x000000FB
+	AdvanceX: 6
+	CharBounds: (0, 1, 5, 7)
+(12, 15)
+	Codepoint: 0x000000FC
+	AdvanceX: 5
+	CharBounds: (0, 1, 4, 3)
+(13, 15)
+	Codepoint: 0x000000FD
+	AdvanceX: 4
+	CharBounds: (1, 1, 3, 4)
+(14, 15)
+	Codepoint: 0x000000FE
+	AdvanceX: 5
+	CharBounds: (1, 1, 4, 6)

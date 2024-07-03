@@ -1,0 +1,37 @@
+# Sprite Meta
+// January 20th 2022
+
+(0, 0)
+	Name: ColonPoundIcon
+	Point: (5, 5)
+		Name: This is a point! :P
+	Point: (4, 5)
+		Name: The other point's friend
+(1, 0)
+	Name: ExportIcon
+(2, 0)
+	Name: FileIcon
+(3, 0)
+	Name: PoundIcon
+	Point: (1, 1)
+		Name: Lonely point :'(
+(0, 1)
+	Name: EyeIcon
+(1, 1)
+	Name: CrossIcon
+(2, 1)
+	Name: ClockIcon
+(3, 1)
+	Name: ParensIcon
+(0, 2)
+	Name: LockIcon
+(1, 2)
+	Name: UnlockIcon
+(2, 2)
+	Name: PauseIcon
+(3, 2)
+	Name: PlayIcon
+(0, 3)
+	Name: ResetIcon
+(1, 3)
+	Name: Check

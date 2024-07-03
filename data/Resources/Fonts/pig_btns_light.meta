@@ -1,0 +1,728 @@
+# Sprite Meta
+// January 21st 2022
+
+(0, 0)
+	Name: Escape
+	Codepoint: 0x00002600
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(1, 0)
+	Name: F1
+	Codepoint: 0x00002601
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 0)
+	Name: F2
+	Codepoint: 0x00002602
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(3, 0)
+	Name: F3
+	Codepoint: 0x00002603
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(4, 0)
+	Name: F4
+	Codepoint: 0x00002604
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(5, 0)
+	Name: F5
+	Codepoint: 0x00002605
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(6, 0)
+	Name: F6
+	Codepoint: 0x00002606
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(7, 0)
+	Name: F7
+	Codepoint: 0x00002607
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(8, 0)
+	Name: F8
+	Codepoint: 0x00002608
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(9, 0)
+	Name: F9
+	Codepoint: 0x00002609
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(10, 0)
+	Name: F10
+	Codepoint: 0x0000260A
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(11, 0)
+	Name: F11
+	Codepoint: 0x0000260B
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(12, 0)
+	Name: F12
+	Codepoint: 0x0000260C
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(13, 0)
+	Name: Space
+	Codepoint: 0x0000260D
+	AdvanceX: 97
+	CharBounds: (2, 26, 96, 48)
+(14, 0)
+	Name: Blank
+	Codepoint: 0x0000260E
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(15, 0)
+	Name: BlankWide
+	Codepoint: 0x0000260F
+	AdvanceX: 97
+	CharBounds: (2, 26, 96, 48)
+(0, 1)
+	Name: Tilde
+	Codepoint: 0x00002610
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(1, 1)
+	Name: 1
+	Codepoint: 0x00002611
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 1)
+	Name: 2
+	Codepoint: 0x00002612
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(3, 1)
+	Name: 3
+	Codepoint: 0x00002613
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(4, 1)
+	Name: 4
+	Codepoint: 0x00002614
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(5, 1)
+	Name: 5
+	Codepoint: 0x00002615
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(6, 1)
+	Name: 6
+	Codepoint: 0x00002616
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(7, 1)
+	Name: 7
+	Codepoint: 0x00002617
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(8, 1)
+	Name: 8
+	Codepoint: 0x00002618
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(9, 1)
+	Name: 9
+	Codepoint: 0x00002619
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(10, 1)
+	Name: 0
+	Codepoint: 0x0000261A
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(11, 1)
+	Name: Minus
+	Codepoint: 0x0000261B
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(12, 1)
+	Name: Plus
+	Codepoint: 0x0000261C
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(13, 1)
+	Name: Back
+	Codepoint: 0x0000261D
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(14, 1)
+	Name: Insert
+	Codepoint: 0x0000261E
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(15, 1)
+	Name: Delete
+	Codepoint: 0x0000261F
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(0, 2)
+	Name: Tab
+	Codepoint: 0x00002620
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(1, 2)
+	Name: Q
+	Codepoint: 0x00002621
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 2)
+	Name: W
+	Codepoint: 0x00002622
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(3, 2)
+	Name: E
+	Codepoint: 0x00002623
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(4, 2)
+	Name: R
+	Codepoint: 0x00002624
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(5, 2)
+	Name: T
+	Codepoint: 0x00002625
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(6, 2)
+	Name: Y
+	Codepoint: 0x00002626
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(7, 2)
+	Name: U
+	Codepoint: 0x00002627
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(8, 2)
+	Name: I
+	Codepoint: 0x00002628
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(9, 2)
+	Name: O
+	Codepoint: 0x00002629
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(10, 2)
+	Name: P
+	Codepoint: 0x0000262A
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(11, 2)
+	Name: OpenBracket
+	Codepoint: 0x0000262B
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(12, 2)
+	Name: CloseBracket
+	Codepoint: 0x0000262C
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(13, 2)
+	Name: Pipe
+	Codepoint: 0x0000262D
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(14, 2)
+	Name: Home
+	Codepoint: 0x0000262E
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(15, 2)
+	Name: End
+	Codepoint: 0x0000262F
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(0, 3)
+	Name: Caps
+	Codepoint: 0x00002630
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(1, 3)
+	Name: A
+	Codepoint: 0x00002631
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 3)
+	Name: S
+	Codepoint: 0x00002632
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(3, 3)
+	Name: D
+	Codepoint: 0x00002633
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(4, 3)
+	Name: F
+	Codepoint: 0x00002634
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(5, 3)
+	Name: G
+	Codepoint: 0x00002635
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(6, 3)
+	Name: H
+	Codepoint: 0x00002636
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(7, 3)
+	Name: J
+	Codepoint: 0x00002637
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(8, 3)
+	Name: K
+	Codepoint: 0x00002638
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(9, 3)
+	Name: L
+	Codepoint: 0x00002639
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(10, 3)
+	Name: Colon
+	Codepoint: 0x0000263A
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(11, 3)
+	Name: Quote
+	Codepoint: 0x0000263B
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(12, 3)
+	Name: Up
+	Codepoint: 0x0000263C
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(13, 3)
+	Name: Enter
+	Codepoint: 0x0000263D
+	AdvanceX: 93
+	CharBounds: (4, 6, 92, 85)
+(14, 3)
+	Name: PageUp
+	Codepoint: 0x0000263E
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(15, 3)
+	Name: PageDown
+	Codepoint: 0x0000263F
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(0, 4)
+	Name: Shift
+	Codepoint: 0x00002640
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(1, 4)
+	Name: Z
+	Codepoint: 0x00002641
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 4)
+	Name: X
+	Codepoint: 0x00002642
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(3, 4)
+	Name: C
+	Codepoint: 0x00002643
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(4, 4)
+	Name: V
+	Codepoint: 0x00002644
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(5, 4)
+	Name: B
+	Codepoint: 0x00002645
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(6, 4)
+	Name: N
+	Codepoint: 0x00002646
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(7, 4)
+	Name: M
+	Codepoint: 0x00002647
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(8, 4)
+	Name: Comma
+	Codepoint: 0x00002648
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(9, 4)
+	Name: Period
+	Codepoint: 0x00002649
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(10, 4)
+	Name: Question
+	Codepoint: 0x0000264A
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(11, 4)
+	Name: Left
+	Codepoint: 0x0000264B
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(12, 4)
+	Name: Down
+	Codepoint: 0x0000264C
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(13, 4)
+	Name: Right
+	Codepoint: 0x0000264D
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(14, 4)
+	Name: Alt
+	Codepoint: 0x0000264E
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(15, 4)
+	Name: Control
+	Codepoint: 0x0000264F
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(0, 5)
+	Name: BlankSquare
+	Codepoint: 0x00002650
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(1, 5)
+	Name: BlankSquareLarger
+	Codepoint: 0x00002651
+	AdvanceX: 77
+	CharBounds: (12, 14, 76, 72)
+(2, 5)
+	Name: BlankSemiWide
+	Codepoint: 0x00002652
+	AdvanceX: 93
+	CharBounds: (4, 19, 92, 62)
+(3, 5)
+	Name: MouseBlank
+	Codepoint: 0x00002653
+	AdvanceX: 69
+	CharBounds: (16, 4, 68, 92)
+(4, 5)
+	Name: MouseLeft
+	Codepoint: 0x00002654
+	AdvanceX: 69
+	CharBounds: (16, 4, 68, 92)
+(5, 5)
+	Name: MouseRight
+	Codepoint: 0x00002655
+	AdvanceX: 69
+	CharBounds: (16, 4, 68, 92)
+(6, 5)
+	Name: MouseMiddle
+	Codepoint: 0x00002656
+	AdvanceX: 69
+	CharBounds: (16, 4, 68, 92)
+(0, 6)
+	Name: XbA
+	Codepoint: 0x00002660
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(1, 6)
+	Name: XbB
+	Codepoint: 0x00002661
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(2, 6)
+	Name: XbX
+	Codepoint: 0x00002662
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(3, 6)
+	Name: XbY
+	Codepoint: 0x00002663
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(4, 6)
+	Name: XbLB
+	Codepoint: 0x00002664
+	AdvanceX: 91
+	CharBounds: (5, 18, 90, 63)
+(5, 6)
+	Name: XbRB
+	Codepoint: 0x00002665
+	AdvanceX: 91
+	CharBounds: (5, 18, 90, 63)
+(6, 6)
+	Name: XbLT
+	Codepoint: 0x00002666
+	AdvanceX: 75
+	CharBounds: (13, 9, 74, 85)
+(7, 6)
+	Name: XbRT
+	Codepoint: 0x00002667
+	AdvanceX: 75
+	CharBounds: (13, 9, 74, 85)
+(8, 6)
+	Name: XbL3
+	Codepoint: 0x00002668
+	AdvanceX: 87
+	CharBounds: (7, 6, 86, 89)
+(9, 6)
+	Name: XbR3
+	Codepoint: 0x00002669
+	AdvanceX: 87
+	CharBounds: (7, 6, 86, 89)
+(10, 6)
+	Name: XbBack
+	Codepoint: 0x0000266A
+	AdvanceX: 93
+	CharBounds: (5, 24, 92, 52)
+(11, 6)
+	Name: XbStart
+	Codepoint: 0x0000266B
+	AdvanceX: 93
+	CharBounds: (5, 24, 92, 52)
+(12, 6)
+	Name: XbUp
+	Codepoint: 0x0000266C
+	AdvanceX: 91
+	CharBounds: (5, 5, 90, 90)
+(13, 6)
+	Name: XbLeft
+	Codepoint: 0x0000266D
+	AdvanceX: 91
+	CharBounds: (5, 5, 90, 90)
+(14, 6)
+	Name: XbDown
+	Codepoint: 0x0000266E
+	AdvanceX: 91
+	CharBounds: (5, 5, 90, 90)
+(15, 6)
+	Name: XbRight
+	Codepoint: 0x0000266F
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(0, 7)
+	Name: XbLeftStick
+	Codepoint: 0x00002670
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(1, 7)
+	Name: XbRightStick
+	Codepoint: 0x00002671
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(2, 7)
+	Name: XbDpad
+	Codepoint: 0x00002672
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(3, 7)
+	Name: XbUnknown
+	Codepoint: 0x00002673
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(0, 8)
+	Name: PsCross
+	Codepoint: 0x00002680
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(1, 8)
+	Name: PsCircle
+	Codepoint: 0x00002681
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(2, 8)
+	Name: PsSquare
+	Codepoint: 0x00002682
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(3, 8)
+	Name: PsTriangle
+	Codepoint: 0x00002683
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(4, 8)
+	Name: PsL1
+	Codepoint: 0x00002684
+	AdvanceX: 86
+	CharBounds: (7, 18, 85, 65)
+(5, 8)
+	Name: PsR1
+	Codepoint: 0x00002685
+	AdvanceX: 86
+	CharBounds: (7, 18, 85, 65)
+(6, 8)
+	Name: PsL2
+	Codepoint: 0x00002686
+	AdvanceX: 76
+	CharBounds: (13, 8, 75, 86)
+(7, 8)
+	Name: PsR2
+	Codepoint: 0x00002687
+	AdvanceX: 76
+	CharBounds: (13, 8, 75, 86)
+(8, 8)
+	Name: PsL3
+	Codepoint: 0x00002688
+	AdvanceX: 87
+	CharBounds: (7, 6, 86, 89)
+(9, 8)
+	Name: PsR3
+	Codepoint: 0x00002689
+	AdvanceX: 87
+	CharBounds: (7, 6, 86, 89)
+(10, 8)
+	Name: PsShare
+	Codepoint: 0x0000268A
+	AdvanceX: 47
+	CharBounds: (27, 4, 46, 89)
+(11, 8)
+	Name: PsOptions
+	Codepoint: 0x0000268B
+	AdvanceX: 47
+	CharBounds: (27, 3, 46, 90)
+(12, 8)
+	Name: PsUp
+	Codepoint: 0x0000268C
+	AdvanceX: 95
+	CharBounds: (3, 3, 94, 94)
+(13, 8)
+	Name: PsLeft
+	Codepoint: 0x0000268D
+	AdvanceX: 95
+	CharBounds: (3, 3, 94, 94)
+(14, 8)
+	Name: PsDown
+	Codepoint: 0x0000268E
+	AdvanceX: 95
+	CharBounds: (3, 3, 94, 94)
+(15, 8)
+	Name: PsRight
+	Codepoint: 0x0000268F
+	AdvanceX: 95
+	CharBounds: (3, 3, 94, 94)
+(0, 9)
+	Name: PsLeftStick
+	Codepoint: 0x00002690
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(1, 9)
+	Name: PsRightStick
+	Codepoint: 0x00002691
+	AdvanceX: 91
+	CharBounds: (5, 6, 90, 89)
+(2, 9)
+	Name: PsDpad
+	Codepoint: 0x00002692
+	AdvanceX: 95
+	CharBounds: (3, 3, 94, 94)
+(3, 9)
+	Name: PsUnknown
+	Codepoint: 0x00002693
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(0, 10)
+	Name: NtB
+	Codepoint: 0x000026A0
+	AdvanceX: 85
+	CharBounds: (8, 8, 84, 84)
+(1, 10)
+	Name: NtA
+	Codepoint: 0x000026A1
+	AdvanceX: 85
+	CharBounds: (8, 8, 84, 84)
+(2, 10)
+	Name: NtY
+	Codepoint: 0x000026A2
+	AdvanceX: 85
+	CharBounds: (8, 8, 84, 84)
+(3, 10)
+	Name: NtX
+	Codepoint: 0x000026A3
+	AdvanceX: 85
+	CharBounds: (8, 8, 84, 84)
+(4, 10)
+	Name: NtL
+	Codepoint: 0x000026A4
+	AdvanceX: 77
+	CharBounds: (12, 13, 76, 72)
+(5, 10)
+	Name: NtR
+	Codepoint: 0x000026A5
+	AdvanceX: 77
+	CharBounds: (12, 13, 76, 72)
+(6, 10)
+	Name: NtZL
+	Codepoint: 0x000026A6
+	AdvanceX: 84
+	CharBounds: (8, 12, 83, 75)
+(7, 10)
+	Name: NtZR
+	Codepoint: 0x000026A7
+	AdvanceX: 84
+	CharBounds: (8, 12, 83, 75)
+(10, 10)
+	Name: NtMinus
+	Codepoint: 0x000026AA
+	AdvanceX: 76
+	CharBounds: (13, 13, 75, 75)
+(11, 10)
+	Name: NtPlus
+	Codepoint: 0x000026AB
+	AdvanceX: 76
+	CharBounds: (13, 13, 75, 75)
+(12, 10)
+	Name: NtUp
+	Codepoint: 0x000026AC
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(13, 10)
+	Name: NtLeft
+	Codepoint: 0x000026AD
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(14, 10)
+	Name: NtDown
+	Codepoint: 0x000026AE
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(15, 10)
+	Name: NtRight
+	Codepoint: 0x000026AF
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)
+(0, 11)
+	Name: NtLeftStick
+	Codepoint: 0x000026B0
+	AdvanceX: 91
+	CharBounds: (5, 5, 90, 90)
+(1, 11)
+	Name: NtRightStick
+	Codepoint: 0x000026B1
+	AdvanceX: 91
+	CharBounds: (5, 5, 90, 90)
+(2, 11)
+	Name: NtDpad
+	Codepoint: 0x000026B2
+	AdvanceX: 101
+	CharBounds: (0, 0, 100, 100)
+(3, 11)
+	Name: NtUnknown
+	Codepoint: 0x000026B3
+	AdvanceX: 83
+	CharBounds: (9, 9, 82, 82)

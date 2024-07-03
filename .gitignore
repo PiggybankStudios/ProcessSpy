@@ -1,0 +1,37 @@
+
+#Folders
+/lib/include/*
+!lib/include/README.txt
+
+/build/*
+!build/build.bat
+!build/build_win32.bat
+!build/build_web.bat
+!build/build_osx.sh
+!build/build_linux.sh
+!build/resources.rc
+
+# /data/Resources/
+/data/Resources/Raw
+/release/
+/engine/
+
+#File Types
+*.vim
+*.a
+*.sublime-workspace
+*.obj
+*.o
+/data/*.exe
+/data/screenshot*.png
+/data/recording*.gif
+/data/ProcessSpy*
+
+#Visual Studio Stuff
+*.VC.*
+/.vs/
+vc140.pdb
+/Debug/
+
+#Mac Stuff
+*.DS_Store
