@@ -30,8 +30,6 @@ Description:
 #define RESOURCE_FOLDER_TEXTURES       "Resources/Textures"
 #define RESOURCE_FOLDER_VECTOR         "Resources/Vector"
 
-#define PARTICLES_FILE_PATH            RESOURCE_FOLDER_TEXT "/particles.txt"
-
 // +--------------------------------------------------------------+
 // |                        Resource Lists                        |
 // +--------------------------------------------------------------+
