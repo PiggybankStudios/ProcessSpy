@@ -31,7 +31,7 @@ Description:
 #define HEADER_BACK_COLOR   NewColor(64, 67, 70) //0xFF404346 (also used for scroll bar)
 #define TEXT_COLOR          NewColor(242, 242, 242) //0xFFF2F2F2
 #define TEXT_GREY_COLOR     NewColor(128, 128, 128) //0xFF808080
-#define OUTLINE_COLOR       NewColor(152, 118, 170) //0xFF9876AA
+#define SELECTED_ITEM_COLOR NewColor(152, 118, 170) //0xFF9876AA
 #define RULER_COLOR         NewColor(57, 57, 57) //0xFF393939
 #define BTN_HOVER_COLOR     NewColor(76, 67, 80) //0xFF4C4350
 #define HIGHLIGHT_COLOR     NewColor(119, 99, 132) //0xFF776384
@@ -69,6 +69,9 @@ rec MainLayoutItems(r32 maxWidth)
 		RecAlign(&item->nameRec);
 		item->mainRec.x = 0;
 		item->mainRec.y = contentRec.y + contentRec.height + (iIndex > 0 ? INTER_ITEM_MARGIN : 0);
+		RecAlign(&item->mainRec);
+		item->hitRec = NewRec(0, 0, maxWidth - item->mainRec.x, item->mainRec.height + INTER_ITEM_MARGIN);
+		RecAlign(&item->hitRec);
 		if (contentRec == Rec_Zero) { contentRec = item->mainRec; }
 		else { contentRec = RecBoth(contentRec, item->mainRec); }
 	}
@@ -90,6 +93,10 @@ void UpdateFolderFileItemsAtCurrentPath()
 		FreeFolderFileItem(mainHeap, item);
 	}
 	VarArrayClear(&main->items);
+	
+	//TODO: We should probably try and maintain the selection through a refresh if we are actually in the same folder as we were before
+	main->primarySelectedItemIndex = -1;
+	main->numSelectedItems = 0;
 	
 	MemArena_t* scratch = GetScratchArena();
 	
@@ -265,6 +272,16 @@ void CaptureMouseMainAppState()
 		MouseHitRecNamed(main->viewportScroll.vertScrollBarRec, "ViewportVertScrollBar");
 		MouseHitRecNamed(main->viewportScroll.vertScrollGutterRec, "ViewportVertScrollGutter");
 	}
+	if (IsMouseInsideRec(main->viewportRec))
+	{
+		v2 itemsOffset = main->viewportRec.topLeft - main->viewportScroll.scroll;
+		VarArrayLoop(&main->items, iIndex)
+		{
+			VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
+			rec hitRec = item->hitRec + item->mainRec.topLeft + itemsOffset;
+			MouseHitRecPrint(hitRec, "ViewportItem%llu", iIndex);
+		}
+	}
 	MouseHitRecNamed(RecInflate(main->viewportRec, PANEL_MARGIN, PANEL_MARGIN), "Viewport");
 	MouseHitRecNamed(RecInflate(main->sidebarRec, PANEL_MARGIN, PANEL_MARGIN), "Sidebar");
 }
@@ -372,6 +389,89 @@ void UpdateMainAppState()
 	}
 	
 	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"), IsMouseOverNamed("ViewportHoriScrollBar"), IsMouseOverNamed("ViewportVertScrollBar"));
+	
+	// +==============================+
+	// |      Ctrl+A Selects All      |
+	// +==============================+
+	if (KeyPressed(Key_A) && KeyDownRaw(Key_Control))
+	{
+		HandleKeyExtended(Key_A);
+		VarArrayLoop(&main->items, iIndex) { VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex); item->isSelected = true; }
+		main->numSelectedItems = main->items.length;
+		if (main->primarySelectedItemIndex < 0 && main->items.length > 0) { main->primarySelectedItemIndex = 0; }
+	}
+	
+	// +==============================+
+	// | Arrow Up/Down Move Selection |
+	// +==============================+
+	if (KeyPressed(Key_Up))
+	{
+		HandleKeyExtended(Key_Up);
+		if (main->items.length > 0)
+		{
+			main->primarySelectedItemIndex = (main->primarySelectedItemIndex > 0) ? (main->primarySelectedItemIndex-1) : (i64)(main->items.length-1);
+			VarArrayLoop(&main->items, iIndex) { VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex); item->isSelected = (main->primarySelectedItemIndex == (i64)iIndex); }
+			main->numSelectedItems = 1;
+		}
+	}
+	if (KeyPressed(Key_Down))
+	{
+		HandleKeyExtended(Key_Down);
+		if (main->items.length > 0)
+		{
+			main->primarySelectedItemIndex = (main->primarySelectedItemIndex >= 0) ? ((main->primarySelectedItemIndex+1) % main->items.length) : 0;
+			VarArrayLoop(&main->items, iIndex) { VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex); item->isSelected = (main->primarySelectedItemIndex == (i64)iIndex); }
+			main->numSelectedItems = 1;
+		}
+	}
+	
+	// +==============================+
+	// |         Update Items         |
+	// +==============================+
+	VarArrayLoop(&main->items, iIndex)
+	{
+		VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
+		item->isHovered = IsMouseOverPrint("ViewportItem%llu", iIndex);
+		
+		if (item->isHovered && MousePressedAndHandleExtended(MouseBtn_Left))
+		{
+			if (KeyDownRaw(Key_Shift) && main->primarySelectedItemIndex >= 0)
+			{
+				//Select range of items
+				main->numSelectedItems = 0;
+				u64 minIndex = MinU64((u64)main->primarySelectedItemIndex, iIndex);
+				u64 maxIndex = MaxU64((u64)main->primarySelectedItemIndex, iIndex);
+				VarArrayLoop(&main->items, iIndex2)
+				{
+					VarArrayLoopGet(FolderFileItem_t, item2, &main->items, iIndex2);
+					if (iIndex2 >= minIndex && iIndex2 <= maxIndex)
+					{
+						item2->isSelected = true;
+						main->numSelectedItems++;
+					}
+					else { item2->isSelected = false; }
+				}
+				// main->primarySelectedItemIndex = (i64)iIndex;
+			}
+			else if (KeyDownRaw(Key_Control))
+			{
+				//Toggle selection on this item
+				item->isSelected = !item->isSelected;
+				if (item->isSelected) { main->numSelectedItems++; }
+				else { main->numSelectedItems--; }
+				main->primarySelectedItemIndex = (i64)iIndex;
+			}
+			else
+			{
+				//Deselect all items
+				VarArrayLoop(&main->items, iIndex2) { VarArrayLoopGet(FolderFileItem_t, item2, &main->items, iIndex2); item2->isSelected = false; }
+				//Select this specific item
+				item->isSelected = true;
+				main->primarySelectedItemIndex = (i64)iIndex;
+				main->numSelectedItems = 1;
+			}
+		}
+	}
 }
 
 // +--------------------------------------------------------------+
@@ -413,6 +513,8 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		rec mainRec = item->mainRec + itemsOffset;
 		rec iconRec = item->iconRec + mainRec.topLeft;
 		rec nameRec = item->nameRec + mainRec.topLeft;
+		rec hitRec = item->hitRec + mainRec.topLeft;
+		hitRec.height -= 1; //Leave 1px space between selected items so they are visually separated
 		v2 namePos = nameRec.topLeft + item->nameMeasure.offset;
 		Vec2Align(&namePos);
 		v2i builtinIconFrame;
@@ -424,7 +526,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			builtinIconFrame = IsEmptyStr(extensionStr) ? NewVec2i(0, 0) : NewVec2i(1, 0);
 		}
 		bool isHidden = StrStartsWith(item->name, ".");
-		Color_t nameColor = isHidden ? TEXT_GREY_COLOR : TEXT_COLOR;
+		Color_t nameColor = TEXT_COLOR;
 		Color_t iconColor = White;
 		Texture_t* osIconTexture = nullptr;
 		if (item->fileIcon != nullptr)
@@ -435,9 +537,26 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			}
 			else { iconColor = item->fileIcon->color; }
 		}
-		if (isHidden) { iconColor = ColorTransparent(iconColor, 0.75f); }
+		if (isHidden && !item->isHovered && !item->isSelected)
+		{
+			nameColor = TEXT_GREY_COLOR;
+			iconColor = ColorTransparent(iconColor, 0.75f);
+		}
 		
 		// RcDrawRectangle(mainRec, (iIndex%2) ? MonokaiGray2 : MonokaiGray1);
+		if (item->isSelected)
+		{
+			RcDrawRectangle(hitRec, SELECTED_ITEM_COLOR);
+		}
+		else if (item->isHovered)
+		{
+			RcDrawRectangle(hitRec, HIGHLIGHT_COLOR);
+		}
+		else if (main->primarySelectedItemIndex >= 0 && (u64)main->primarySelectedItemIndex == iIndex)
+		{
+			RcDrawRectangleOutline(hitRec, HIGHLIGHT_COLOR, 1);
+		}
+		
 		rec oldViewportRec = RcAndViewport(mainRec);
 		
 		//If the OS provided an icon for this file, then let's use that icon instead of our builtin default one

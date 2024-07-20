@@ -18,9 +18,13 @@ struct FolderFileItem_t
 	u64 iconId;
 	FileIcon_t* fileIcon;
 	
+	bool isHovered;
+	bool isSelected;
+	
 	TextMeasure_t nameMeasure;
 	rec mainRec;
-	//These are both relative to mainRec.topLeft
+	//These are all relative to mainRec.topLeft
+	rec hitRec; //used for mouse hit testing, spans full width
 	rec nameRec;
 	rec iconRec;
 };
@@ -30,6 +34,8 @@ struct MainAppState_t
 	bool initialized;
 	
 	MyStr_t currentPath;
+	u64 numSelectedItems;
+	i64 primarySelectedItemIndex;
 	VarArray_t items; //FolderFileItem_t
 	FileIconCache_t iconCache;
 	
