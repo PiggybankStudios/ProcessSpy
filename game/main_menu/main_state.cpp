@@ -58,11 +58,11 @@ rec MainLayoutItems(r32 maxWidth)
 		item->nameRec.x = item->iconRec.x + item->iconRec.width + ICON_ITEM_NAME_MARGIN;
 		item->mainRec.height = MaxR32(item->iconRec.height, item->nameRec.height) + ITEM_INNER_PADDING_TOP_BOTTOM*2;
 		item->mainRec.width = item->nameRec.x + item->nameRec.width + ITEM_INNER_PADDING_LEFT_RIGHT;
-		if (item->mainRec.width > maxWidth)
-		{
-			item->mainRec.width = maxWidth;
-			item->nameRec.width = (item->mainRec.width - ITEM_INNER_PADDING_LEFT_RIGHT) - item->nameRec.x;
-		}
+		// if (item->mainRec.width > maxWidth)
+		// {
+		// 	item->mainRec.width = maxWidth;
+		// 	item->nameRec.width = (item->mainRec.width - ITEM_INNER_PADDING_LEFT_RIGHT) - item->nameRec.x;
+		// }
 		item->iconRec.y = item->mainRec.height/2 - item->iconRec.height/2;
 		item->nameRec.y = item->mainRec.height/2 - item->nameRec.height/2;
 		RecAlign(&item->iconRec);
@@ -131,7 +131,7 @@ void UpdateFolderFileItemsAtCurrentPath()
 		numFiles++;
 	}
 	
-	PrintLine_I("Found %llu folder%s and %llu file%s", numFolders, Plural(numFolders, "s"), numFiles, Plural(numFiles, "s"));
+	PrintLine_I("Found %llu folder%s and %llu file%s in \"%.*s\"", numFolders, Plural(numFolders, "s"), numFiles, Plural(numFiles, "s"), StrPrint(main->currentPath));
 	
 	FreeScratchArena(scratch);
 }
@@ -140,9 +140,47 @@ void MoveToPath(MyStr_t newPath)
 {
 	while (StrEndsWith(newPath, "/")) { newPath.length--; }
 	if (StrEquals(main->currentPath, newPath)) { return; }
-	FreeString(mainHeap, &main->currentPath);
-	main->currentPath = AllocString(mainHeap, &newPath);
+	//NOTE: Alloc has to happen BEFORE freeing of currentPath, because newPath might be dependent on currentPath's allocation
+	MyStr_t newPathAllocated = AllocString(mainHeap, &newPath);
+	MyStr_t oldPath = main->currentPath;
+	main->currentPath = newPathAllocated;
 	UpdateFolderFileItemsAtCurrentPath();
+	if (oldPath.length > newPath.length && StrStartsWith(oldPath, newPath))
+	{
+		MyStr_t exitedFolderStr = StrSubstring(&oldPath, newPath.length);
+		while (StrStartsWith(exitedFolderStr, "/")) { exitedFolderStr.chars++; exitedFolderStr.length--; }
+		while (StrEndsWith(exitedFolderStr, "/")) { exitedFolderStr.length--; }
+		u64 firstSlashCharIndex = 0;
+		if (FindNextCharInStr(exitedFolderStr, 0, "/", &firstSlashCharIndex))
+		{
+			exitedFolderStr = StrSubstring(&exitedFolderStr, 0, firstSlashCharIndex);
+		}
+		bool foundExitedFolder = false;
+		u64 exitedFolderItemIndex = 0;
+		VarArrayLoop(&main->items, iIndex)
+		{
+			VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
+			if (item->isFolder && StrEqualsIgnoreCase(item->name, exitedFolderStr))
+			{
+				exitedFolderItemIndex = iIndex;
+				foundExitedFolder = true;
+				break;
+			}
+		}
+		if (foundExitedFolder)
+		{
+			VarArrayLoop(&main->items, iIndex)
+			{
+				VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
+				item->isSelected = (iIndex == exitedFolderItemIndex);
+				// if (iIndex == exitedFolderItemIndex) { PrintLine_I("Scrolling to item[%llu] \"%.*s\"", exitedFolderItemIndex, StrPrint(item->name)); }
+			}
+			main->numSelectedItems = 1;
+			main->primarySelectedItemIndex = (i64)exitedFolderItemIndex;
+			main->instantScrollToSelected = true;
+		}
+	}
+	FreeString(mainHeap, &oldPath);
 }
 
 // +--------------------------------------------------------------+
@@ -292,6 +330,7 @@ void CaptureMouseMainAppState()
 void UpdateMainAppState()
 {
 	NotNull(main);
+	MemArena_t* scratch = GetScratchArena();
 	MainAppStateAccessResources();
 	LayoutMainAppState();
 	CaptureMouseMainAppState();
@@ -391,6 +430,38 @@ void UpdateMainAppState()
 	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"), IsMouseOverNamed("ViewportHoriScrollBar"), IsMouseOverNamed("ViewportVertScrollBar"));
 	
 	// +==============================+
+	// |      Scroll to Selected      |
+	// +==============================+
+	//TODO: Somehow this is getting run BEFORE we think we have any scrollable area available. We either need to wait 1 more frame, or we need to change order of operations so we are fully aware of scrollable area here
+	if (main->scrollToSelected || main->instantScrollToSelected || main->softScrollToSelected)
+	{
+		// PrintLine_D("Handling scroll to selected request: (%f, %f) %llu items", main->viewportScroll.scrollMax.x, main->viewportScroll.scrollMax.y, main->items.length);
+		if (main->primarySelectedItemIndex >= 0)
+		{
+			FolderFileItem_t* selectedItem = VarArrayGetHard(&main->items, (u64)main->primarySelectedItemIndex, FolderFileItem_t);
+			bool shouldScrollX = true;
+			bool shouldScrollY = true;
+			if (!main->scrollToSelected && !main->instantScrollToSelected)
+			{
+				if (((selectedItem->mainRec.x + selectedItem->mainRec.width) - main->viewportScroll.scroll.x) > main->viewportScroll.usableRec.width) { shouldScrollX = true; }
+				else if ((selectedItem->mainRec.x - main->viewportScroll.scroll.x) < 0) { shouldScrollX = true; }
+				else { shouldScrollX = false; }
+				
+				if (((selectedItem->mainRec.y + selectedItem->mainRec.height) - main->viewportScroll.scroll.y) > main->viewportScroll.usableRec.height) { shouldScrollY = true; }
+				else if ((selectedItem->mainRec.y - main->viewportScroll.scroll.y) < 0) { shouldScrollY = true; }
+				else { shouldScrollY = false; }
+			}
+			if (shouldScrollX) { main->viewportScroll.scrollGoto.x = selectedItem->mainRec.x + selectedItem->mainRec.width/2 - main->viewportScroll.usableRec.width/2; }
+			if (shouldScrollY) { main->viewportScroll.scrollGoto.y = selectedItem->mainRec.y + selectedItem->mainRec.height/2 - main->viewportScroll.usableRec.height/2; }
+			if (main->instantScrollToSelected) { main->viewportScroll.scroll = main->viewportScroll.scrollGoto; }
+		}
+		
+		main->scrollToSelected = false;
+		main->instantScrollToSelected = false;
+		main->softScrollToSelected = false;
+	}
+	
+	// +==============================+
 	// |      Ctrl+A Selects All      |
 	// +==============================+
 	if (KeyPressed(Key_A) && KeyDownRaw(Key_Control))
@@ -404,24 +475,26 @@ void UpdateMainAppState()
 	// +==============================+
 	// | Arrow Up/Down Move Selection |
 	// +==============================+
-	if (KeyPressed(Key_Up))
+	if (KeyPressedRepeating(Key_Up, 400, 30))
 	{
-		HandleKeyExtended(Key_Up);
+		HandleKey(Key_Up);
 		if (main->items.length > 0)
 		{
 			main->primarySelectedItemIndex = (main->primarySelectedItemIndex > 0) ? (main->primarySelectedItemIndex-1) : (i64)(main->items.length-1);
 			VarArrayLoop(&main->items, iIndex) { VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex); item->isSelected = (main->primarySelectedItemIndex == (i64)iIndex); }
 			main->numSelectedItems = 1;
+			main->softScrollToSelected = true;
 		}
 	}
-	if (KeyPressed(Key_Down))
+	if (KeyPressedRepeating(Key_Down, 400, 30))
 	{
-		HandleKeyExtended(Key_Down);
+		HandleKey(Key_Down);
 		if (main->items.length > 0)
 		{
 			main->primarySelectedItemIndex = (main->primarySelectedItemIndex >= 0) ? ((main->primarySelectedItemIndex+1) % main->items.length) : 0;
 			VarArrayLoop(&main->items, iIndex) { VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex); item->isSelected = (main->primarySelectedItemIndex == (i64)iIndex); }
 			main->numSelectedItems = 1;
+			main->softScrollToSelected = true;
 		}
 	}
 	
@@ -463,15 +536,54 @@ void UpdateMainAppState()
 			}
 			else
 			{
-				//Deselect all items
-				VarArrayLoop(&main->items, iIndex2) { VarArrayLoopGet(FolderFileItem_t, item2, &main->items, iIndex2); item2->isSelected = false; }
-				//Select this specific item
-				item->isSelected = true;
-				main->primarySelectedItemIndex = (i64)iIndex;
-				main->numSelectedItems = 1;
+				if (item->isSelected && TimeSince(item->lastClickTime) < plat->GetRapidClickMaxTime())
+				{
+					item->quickClickCount++;
+				}
+				else { item->quickClickCount = 1; }
+				item->lastClickTime = ProgramTime;
+				
+				if (item->quickClickCount == 2)
+				{
+					if (item->isFolder)
+					{
+						MyStr_t newPath = PrintInArenaStr(scratch, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(item->name));
+						MoveToPath(newPath);
+					}
+					else
+					{
+						NotifyWrite_W("This tool doesn't support opening files yet");
+					}
+				}
+				else
+				{
+					//Deselect all items
+					VarArrayLoop(&main->items, iIndex2) { VarArrayLoopGet(FolderFileItem_t, item2, &main->items, iIndex2); item2->isSelected = false; }
+					//Select this specific item
+					item->isSelected = true;
+					main->primarySelectedItemIndex = (i64)iIndex;
+					main->numSelectedItems = 1;
+				}
 			}
 		}
 	}
+	
+	// +==================================+
+	// | Enter Key Opens Selected Folder  |
+	// +==================================+
+	//TODO: This eventually should open multiple tabs if multiple folders are selected
+	if (KeyPressed(Key_Enter) && main->primarySelectedItemIndex >= 0 && main->numSelectedItems == 1)
+	{
+		HandleKeyExtended(Key_Enter);
+		FolderFileItem_t* selectedItem = VarArrayGetHard(&main->items, (u64)main->primarySelectedItemIndex, FolderFileItem_t);
+		if (selectedItem->isFolder)
+		{
+			MyStr_t newPath = PrintInArenaStr(scratch, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(selectedItem->name));
+			MoveToPath(newPath);
+		}
+	}
+	
+	FreeScratchArena(scratch);
 }
 
 // +--------------------------------------------------------------+
@@ -493,9 +605,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	RcDrawRectangle(main->sidebarRec, PANEL_BACK_COLOR);
 	RcDrawRectangleOutline(main->sidebarRec, PANEL_OUTLINE_COLOR, 1);
 	
-	RenderScrollView(&main->viewportScroll, PANEL_BACK_COLOR, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
-	// RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
-	RcDrawRectangleOutline(main->viewportRec, PANEL_OUTLINE_COLOR, 1);
+	RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
 	
 	RcDrawRectangle(main->topbarRec, PANEL_BACK_COLOR);
 	
@@ -515,67 +625,77 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		rec nameRec = item->nameRec + mainRec.topLeft;
 		rec hitRec = item->hitRec + mainRec.topLeft;
 		hitRec.height -= 1; //Leave 1px space between selected items so they are visually separated
-		v2 namePos = nameRec.topLeft + item->nameMeasure.offset;
-		Vec2Align(&namePos);
-		v2i builtinIconFrame;
-		if (item->isFolder) { builtinIconFrame = NewVec2i(2, 0); }
-		else
+		
+		if (RecsIntersect(hitRec, main->viewportRec))
 		{
-			MyStr_t extensionStr = MyStr_Empty;
-			SplitFilePath(item->name, nullptr, nullptr, &extensionStr);
-			builtinIconFrame = IsEmptyStr(extensionStr) ? NewVec2i(0, 0) : NewVec2i(1, 0);
-		}
-		bool isHidden = StrStartsWith(item->name, ".");
-		Color_t nameColor = TEXT_COLOR;
-		Color_t iconColor = White;
-		Texture_t* osIconTexture = nullptr;
-		if (item->fileIcon != nullptr)
-		{
-			if (item->fileIcon->texture.isValid)
+			v2 namePos = nameRec.topLeft + item->nameMeasure.offset;
+			Vec2Align(&namePos);
+			v2i builtinIconFrame;
+			if (item->isFolder) { builtinIconFrame = NewVec2i(2, 0); }
+			else
 			{
-				osIconTexture = &item->fileIcon->texture;
+				MyStr_t extensionStr = MyStr_Empty;
+				SplitFilePath(item->name, nullptr, nullptr, &extensionStr);
+				builtinIconFrame = IsEmptyStr(extensionStr) ? NewVec2i(0, 0) : NewVec2i(1, 0);
 			}
-			else { iconColor = item->fileIcon->color; }
+			bool isHidden = StrStartsWith(item->name, ".");
+			Color_t nameColor = TEXT_COLOR;
+			Color_t iconColor = White;
+			Texture_t* osIconTexture = nullptr;
+			if (item->fileIcon != nullptr)
+			{
+				if (item->fileIcon->texture.isValid)
+				{
+					osIconTexture = &item->fileIcon->texture;
+				}
+				else { iconColor = item->fileIcon->color; }
+			}
+			if (isHidden && !item->isHovered && !item->isSelected)
+			{
+				nameColor = TEXT_GREY_COLOR;
+				iconColor = ColorTransparent(iconColor, 0.75f);
+			}
+			
+			// RcDrawRectangle(mainRec, (iIndex%2) ? MonokaiGray2 : MonokaiGray1);
+			if (item->isSelected)
+			{
+				RcDrawRectangle(hitRec, SELECTED_ITEM_COLOR);
+			}
+			else if (item->isHovered)
+			{
+				RcDrawRectangle(hitRec, HIGHLIGHT_COLOR);
+			}
+			else if (main->primarySelectedItemIndex >= 0 && (u64)main->primarySelectedItemIndex == iIndex)
+			{
+				RcDrawRectangleOutline(hitRec, HIGHLIGHT_COLOR, 1);
+			}
+			
+			rec oldViewportRec = RcAndViewport(mainRec);
+			
+			//If the OS provided an icon for this file, then let's use that icon instead of our builtin default one
+			if (osIconTexture != nullptr)
+			{
+				RcBindTexture1(osIconTexture);
+				RcDrawTexturedRectangle(iconRec, iconColor);
+			}
+			else
+			{
+				RcBindSpriteSheet(&pig->resources.sheets->fileIcons);
+				RcDrawSheetFrame(builtinIconFrame, iconRec, iconColor);
+			}
+			
+			RcDrawText(item->name, namePos, nameColor);
+			
+			RcSetViewport(oldViewportRec);
 		}
-		if (isHidden && !item->isHovered && !item->isSelected)
-		{
-			nameColor = TEXT_GREY_COLOR;
-			iconColor = ColorTransparent(iconColor, 0.75f);
-		}
-		
-		// RcDrawRectangle(mainRec, (iIndex%2) ? MonokaiGray2 : MonokaiGray1);
-		if (item->isSelected)
-		{
-			RcDrawRectangle(hitRec, SELECTED_ITEM_COLOR);
-		}
-		else if (item->isHovered)
-		{
-			RcDrawRectangle(hitRec, HIGHLIGHT_COLOR);
-		}
-		else if (main->primarySelectedItemIndex >= 0 && (u64)main->primarySelectedItemIndex == iIndex)
-		{
-			RcDrawRectangleOutline(hitRec, HIGHLIGHT_COLOR, 1);
-		}
-		
-		rec oldViewportRec = RcAndViewport(mainRec);
-		
-		//If the OS provided an icon for this file, then let's use that icon instead of our builtin default one
-		if (osIconTexture != nullptr)
-		{
-			RcBindTexture1(osIconTexture);
-			RcDrawTexturedRectangle(iconRec, iconColor);
-		}
-		else
-		{
-			RcBindSpriteSheet(&pig->resources.sheets->fileIcons);
-			RcDrawSheetFrame(builtinIconFrame, iconRec, iconColor);
-		}
-		
-		RcDrawText(item->name, namePos, nameColor);
-		
-		RcSetViewport(oldViewportRec);
 	}
 	RcSetViewport(ScreenRec);
+	
+	// +==============================+
+	// |      Render ScrollBars       |
+	// +==============================+
+	RcDrawRectangleOutline(main->viewportRec, PANEL_OUTLINE_COLOR, 1);
+	RenderScrollView(&main->viewportScroll, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
 	
 	// +==============================+
 	// |    Render Topbar Buttons     |

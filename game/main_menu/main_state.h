@@ -20,6 +20,8 @@ struct FolderFileItem_t
 	
 	bool isHovered;
 	bool isSelected;
+	u64 lastClickTime;
+	u64 quickClickCount;
 	
 	TextMeasure_t nameMeasure;
 	rec mainRec;
@@ -36,6 +38,9 @@ struct MainAppState_t
 	MyStr_t currentPath;
 	u64 numSelectedItems;
 	i64 primarySelectedItemIndex;
+	bool softScrollToSelected;
+	bool scrollToSelected;
+	bool instantScrollToSelected;
 	VarArray_t items; //FolderFileItem_t
 	FileIconCache_t iconCache;
 	

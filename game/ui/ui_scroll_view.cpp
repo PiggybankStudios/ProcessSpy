@@ -14,6 +14,8 @@ Description:
 #define UI_SCROLL_VIEW_GUTTER_WIDTH               20 //px
 #define UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME   300 //ms
 
+//TODO: Horizontal scroll bar overlaps vertical scroll bar in bottom right
+
 void ClampScrollViewScroll(ScrollView_t* scrollView)
 {
 	NotNull(scrollView);
@@ -217,20 +219,19 @@ void UpdateScrollView(ScrollView_t* scrollView, bool isMouseInside, bool isMouse
 	ClampScrollViewScroll(scrollView);
 }
 
-void RenderScrollView(ScrollView_t* scrollView, Color_t backColor, Color_t scrollGutterColor, Color_t scrollBarColor, Color_t scrollBarHighlightColor)
+void RenderScrollView(ScrollView_t* scrollView, Color_t scrollGutterColor, Color_t scrollBarColor, Color_t scrollBarHighlightColor)
 {
 	ScrollViewLayout(scrollView);
 	
 	rec oldViewport = RcAndViewport(scrollView->mainRec);
 	
-	RcDrawRectangle(scrollView->mainRec, backColor);
-	if (scrollView->scrollMax.x > 0)
+	if (scrollView->scrollMax.x > scrollView->scrollMin.x)
 	{
 		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->horiScrollBarGrabbed ? 1.0f : (scrollView->horiScrollBarHighlightAnim * 0.75f));
 		RcDrawRectangle(scrollView->horiScrollGutterRec, scrollGutterColor);
 		RcDrawRectangle(scrollView->horiScrollBarRec, barColor);
 	}
-	if (scrollView->scrollMax.y > 0)
+	if (scrollView->scrollMax.y > scrollView->scrollMin.y)
 	{
 		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->vertScrollBarGrabbed ? 1.0f : (scrollView->vertScrollBarHighlightAnim * 0.75f));
 		RcDrawRectangle(scrollView->vertScrollGutterRec, scrollGutterColor);
