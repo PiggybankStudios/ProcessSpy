@@ -25,16 +25,22 @@ struct ScrollView_t
 	
 	v2 scroll;
 	v2 scrollGoto;
+	bool horiScrollBarGrabbed;
+	r32 horiScrollBarHighlightAnim;
+	v2 horiScrollBarGrabOffset;
+	bool vertScrollBarGrabbed;
+	r32 vertScrollBarHighlightAnim;
+	v2 vertScrollBarGrabOffset;
 	
 	bool scrollChanged;
 	v2 scrollDelta; //amount moved this frame
 	
 	rec mainRec;
 	rec usableRec; //mainRec - scrollGutterRec
-	rec vertScrollBarRec;
-	rec vertScrollGutterRec;
 	rec horiScrollBarRec;
 	rec horiScrollGutterRec;
+	rec vertScrollBarRec;
+	rec vertScrollGutterRec;
 };
 
 #endif //  _UI_SCROLL_VIEW_H

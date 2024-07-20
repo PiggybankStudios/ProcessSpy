@@ -8,11 +8,15 @@ Date:   07\02\2024
 #define _MAIN_STATE_H
 
 #include "ui/ui_scroll_view.h"
+#include "main_menu/file_icon_cache.h"
 
 struct FolderFileItem_t
 {
 	bool isFolder;
 	MyStr_t name;
+	MyStr_t path;
+	u64 iconId;
+	FileIcon_t* fileIcon;
 	
 	TextMeasure_t nameMeasure;
 	rec mainRec;
@@ -27,8 +31,10 @@ struct MainAppState_t
 	
 	MyStr_t currentPath;
 	VarArray_t items; //FolderFileItem_t
+	FileIconCache_t iconCache;
 	
 	r32 sidebarWidth;
+	r32 userSetSidebarWidth;
 	bool resizingSidebar;
 	r32 resizingSidebarGrabOffset;
 	

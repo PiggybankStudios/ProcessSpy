@@ -1,0 +1,13 @@
+# TODO List
+	[X] Get file icons from Windows
+	[ ] Only render items that are within view (maybe also postpone requesting the icon until they are in view)
+	[X] Add a scroll bar to ScrollView_t
+	[ ] Add up/down buttons to ScrollView_t scroll bar gutter
+	[ ] Implement forward/back buttons
+	[ ] Add editable textbox popup when clicking on current path in the top bar
+	[ ] Add item hover and selection
+	[ ] Add navigation with double click on a folder or link
+	[ ] Add navigation with enter when a folder/link is selected
+	[ ] Add list of active processes in the left-side panel
+	[ ] Set up the Procmon event firehose
+	[ ] Save the sidebarWidth and currentPath to the application settings

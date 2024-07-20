@@ -9,11 +9,12 @@ Description:
 #include "ui/ui_scroll_view.cpp"
 
 #include "main_menu/main_helpers.cpp"
+#include "main_menu/file_icon_cache.cpp"
 
 #define PANEL_MARGIN        1   //px
 #define PANEL_DIVIDER_WIDTH 5   //px
 #define MIN_SIDEBAR_WIDTH   100 //px
-#define MIN_VIEWPORT_WIDTH  75  //px
+#define MIN_VIEWPORT_WIDTH  250  //px
 #define TOPBAR_HEIGHT       40  //px
 #define NAV_BTN_SIZE        NewVec2(32, 32) //px
 #define PATH_PIECE_MARGIN   4 //px
@@ -26,18 +27,20 @@ Description:
 
 #define PANEL_BACK_COLOR    NewColor(50, 50, 50) //0xFF323232
 #define PANEL_OUTLINE_COLOR NewColor(85, 85, 85) //0xFF555555
-#define DIVIDER_COLOR       NewColor(43, 43, 43) //0xFF2B2B2B
-#define HEADER_BACK_COLOR   NewColor(64, 67, 70) //0xFF404346
+#define DIVIDER_COLOR       NewColor(43, 43, 43) //0xFF2B2B2B (also used for scroll gutter)
+#define HEADER_BACK_COLOR   NewColor(64, 67, 70) //0xFF404346 (also used for scroll bar)
 #define TEXT_COLOR          NewColor(242, 242, 242) //0xFFF2F2F2
 #define TEXT_GREY_COLOR     NewColor(128, 128, 128) //0xFF808080
 #define OUTLINE_COLOR       NewColor(152, 118, 170) //0xFF9876AA
 #define RULER_COLOR         NewColor(57, 57, 57) //0xFF393939
 #define BTN_HOVER_COLOR     NewColor(76, 67, 80) //0xFF4C4350
+#define HIGHLIGHT_COLOR     NewColor(119, 99, 132) //0xFF776384
 
 void FreeFolderFileItem(MemArena_t* allocArena, FolderFileItem_t* item)
 {
 	NotNull2(allocArena, item);
 	FreeString(allocArena, &item->name);
+	FreeString(allocArena, &item->path);
 	ClearPointer(item);
 }
 
@@ -100,6 +103,8 @@ void UpdateFolderFileItemsAtCurrentPath()
 		ClearPointer(newFolderItem);
 		newFolderItem->isFolder = true;
 		newFolderItem->name = AllocString(mainHeap, &folderName);
+		newFolderItem->path = PrintInArenaStr(mainHeap, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(folderName));
+		newFolderItem->iconId = 0;
 		numFolders++;
 	}
 	
@@ -113,6 +118,9 @@ void UpdateFolderFileItemsAtCurrentPath()
 		ClearPointer(newFileItem);
 		newFileItem->isFolder = false;
 		newFileItem->name = AllocString(mainHeap, &fileName);
+		newFileItem->path = PrintInArenaStr(mainHeap, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(fileName));
+		newFileItem->iconId = plat->GetFileIconId(newFileItem->path);
+		newFileItem->fileIcon = FindFileIconById(&main->iconCache, newFileItem->iconId, newFileItem->path);
 		numFiles++;
 	}
 	
@@ -123,6 +131,7 @@ void UpdateFolderFileItemsAtCurrentPath()
 
 void MoveToPath(MyStr_t newPath)
 {
+	while (StrEndsWith(newPath, "/")) { newPath.length--; }
 	if (StrEquals(main->currentPath, newPath)) { return; }
 	FreeString(mainHeap, &main->currentPath);
 	main->currentPath = AllocString(mainHeap, &newPath);
@@ -153,9 +162,11 @@ void StartMainAppState(AppState_t oldAppState, bool initialize)
 		
 		main->sidebarWidth = ScreenSize.width * 0.25f;
 		if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
+		main->userSetSidebarWidth = main->sidebarWidth;
 		
 		CreateVarArray(&main->items, mainHeap, sizeof(FolderFileItem_t));
 		InitUiScrollView(&main->viewportScroll);
+		InitFileIconCache(&main->iconCache, mainHeap);
 		
 		MyStr_t homePath = plat->GetSpecialFolderPath(SpecialFolder_Home, NewStr(PROJECT_NAME), scratch);
 		MoveToPath(homePath);
@@ -185,6 +196,7 @@ void StopMainAppState(AppState_t newAppState, bool deinitialize, bool shuttingDo
 			FreeFolderFileItem(mainHeap, item);
 		}
 		FreeVarArray(&main->items);
+		FreeFileIconCache(&main->iconCache);
 		ClearPointer(main);
 	}
 }
@@ -243,6 +255,16 @@ void CaptureMouseMainAppState()
 	MouseHitRecNamed(RecInflate(main->forwardBtnRec, INTER_BTN_MARGIN/2, 0), "ForwardBtn");
 	MouseHitRecNamed(RecInflate(main->upBtnRec, INTER_BTN_MARGIN/2, 0), "UpBtn");
 	MouseHitRecNamed(RecInflate(main->dividerRec, 2, 0), "Divider");
+	if (main->viewportScroll.scrollMax.x > main->viewportScroll.scrollMin.x)
+	{
+		MouseHitRecNamed(main->viewportScroll.horiScrollBarRec, "ViewportHoriScrollBar");
+		MouseHitRecNamed(main->viewportScroll.horiScrollGutterRec, "ViewportHoriScrollGutter");
+	}
+	if (main->viewportScroll.scrollMax.y > main->viewportScroll.scrollMin.y)
+	{
+		MouseHitRecNamed(main->viewportScroll.vertScrollBarRec, "ViewportVertScrollBar");
+		MouseHitRecNamed(main->viewportScroll.vertScrollGutterRec, "ViewportVertScrollGutter");
+	}
 	MouseHitRecNamed(RecInflate(main->viewportRec, PANEL_MARGIN, PANEL_MARGIN), "Viewport");
 	MouseHitRecNamed(RecInflate(main->sidebarRec, PANEL_MARGIN, PANEL_MARGIN), "Sidebar");
 }
@@ -271,7 +293,13 @@ void UpdateMainAppState()
 	// +==============================+
 	if (pig->currentWindow->input.resized)
 	{
-		if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH) { main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH; }
+		if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
+		if (main->sidebarWidth < main->userSetSidebarWidth) { main->sidebarWidth = main->userSetSidebarWidth; }
+		if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH)
+		{
+			main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH;
+			if (main->sidebarWidth < 10) { main->sidebarWidth = 10; }
+		}
 	}
 	
 	// +==================================+
@@ -287,6 +315,7 @@ void UpdateMainAppState()
 			if (MouseDownRaw(MouseBtn_Left))
 			{
 				main->sidebarWidth = MousePos.x - main->resizingSidebarGrabOffset;
+				main->userSetSidebarWidth = main->sidebarWidth;
 				if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
 				else if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH) { main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH; }
 			}
@@ -342,7 +371,7 @@ void UpdateMainAppState()
 		}
 	}
 	
-	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"));
+	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"), IsMouseOverNamed("ViewportHoriScrollBar"), IsMouseOverNamed("ViewportVertScrollBar"));
 }
 
 // +--------------------------------------------------------------+
@@ -364,7 +393,8 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	RcDrawRectangle(main->sidebarRec, PANEL_BACK_COLOR);
 	RcDrawRectangleOutline(main->sidebarRec, PANEL_OUTLINE_COLOR, 1);
 	
-	RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
+	RenderScrollView(&main->viewportScroll, PANEL_BACK_COLOR, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
+	// RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
 	RcDrawRectangleOutline(main->viewportRec, PANEL_OUTLINE_COLOR, 1);
 	
 	RcDrawRectangle(main->topbarRec, PANEL_BACK_COLOR);
@@ -385,23 +415,42 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		rec nameRec = item->nameRec + mainRec.topLeft;
 		v2 namePos = nameRec.topLeft + item->nameMeasure.offset;
 		Vec2Align(&namePos);
-		v2i iconFrame;
-		if (item->isFolder) { iconFrame = NewVec2i(2, 0); }
+		v2i builtinIconFrame;
+		if (item->isFolder) { builtinIconFrame = NewVec2i(2, 0); }
 		else
 		{
 			MyStr_t extensionStr = MyStr_Empty;
 			SplitFilePath(item->name, nullptr, nullptr, &extensionStr);
-			iconFrame = GetIconForExtension(extensionStr);
+			builtinIconFrame = IsEmptyStr(extensionStr) ? NewVec2i(0, 0) : NewVec2i(1, 0);
 		}
 		bool isHidden = StrStartsWith(item->name, ".");
 		Color_t nameColor = isHidden ? TEXT_GREY_COLOR : TEXT_COLOR;
-		Color_t iconColor = isHidden ? ColorTransparent(White, 0.75f) : White;
+		Color_t iconColor = White;
+		Texture_t* osIconTexture = nullptr;
+		if (item->fileIcon != nullptr)
+		{
+			if (item->fileIcon->texture.isValid)
+			{
+				osIconTexture = &item->fileIcon->texture;
+			}
+			else { iconColor = item->fileIcon->color; }
+		}
+		if (isHidden) { iconColor = ColorTransparent(iconColor, 0.75f); }
 		
 		// RcDrawRectangle(mainRec, (iIndex%2) ? MonokaiGray2 : MonokaiGray1);
 		rec oldViewportRec = RcAndViewport(mainRec);
 		
-		RcBindSpriteSheet(&pig->resources.sheets->fileIcons);
-		RcDrawSheetFrame(iconFrame, iconRec, iconColor);
+		//If the OS provided an icon for this file, then let's use that icon instead of our builtin default one
+		if (osIconTexture != nullptr)
+		{
+			RcBindTexture1(osIconTexture);
+			RcDrawTexturedRectangle(iconRec, iconColor);
+		}
+		else
+		{
+			RcBindSpriteSheet(&pig->resources.sheets->fileIcons);
+			RcDrawSheetFrame(builtinIconFrame, iconRec, iconColor);
+		}
 		
 		RcDrawText(item->name, namePos, nameColor);
 		

@@ -11,6 +11,9 @@ Description:
 	** be put inside a scroll view, but it also puts the burden on the caller to route info around.
 */
 
+#define UI_SCROLL_VIEW_GUTTER_WIDTH               20 //px
+#define UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME   300 //ms
+
 void ClampScrollViewScroll(ScrollView_t* scrollView)
 {
 	NotNull(scrollView);
@@ -18,6 +21,45 @@ void ClampScrollViewScroll(ScrollView_t* scrollView)
 	scrollView->scroll.y = ClampR32(scrollView->scroll.y, scrollView->scrollMin.y, scrollView->scrollMax.y);
 	scrollView->scrollGoto.x = ClampR32(scrollView->scrollGoto.x, scrollView->scrollMin.x, scrollView->scrollMax.x);
 	scrollView->scrollGoto.y = ClampR32(scrollView->scrollGoto.y, scrollView->scrollMin.y, scrollView->scrollMax.y);
+}
+
+void ScrollViewLayout(ScrollView_t* scrollView)
+{
+	scrollView->horiScrollGutterRec.height = UI_SCROLL_VIEW_GUTTER_WIDTH;
+	scrollView->horiScrollGutterRec.x = scrollView->mainRec.x;
+	scrollView->horiScrollGutterRec.y = (scrollView->mainRec.y + scrollView->mainRec.height) - scrollView->horiScrollGutterRec.height;
+	scrollView->horiScrollGutterRec.width = scrollView->mainRec.width;
+	RecAlign(&scrollView->horiScrollGutterRec);
+	
+	scrollView->vertScrollGutterRec.width = UI_SCROLL_VIEW_GUTTER_WIDTH;
+	scrollView->vertScrollGutterRec.x = (scrollView->mainRec.x + scrollView->mainRec.width) - scrollView->vertScrollGutterRec.width;
+	scrollView->vertScrollGutterRec.y = scrollView->mainRec.y;
+	scrollView->vertScrollGutterRec.height = scrollView->mainRec.height;
+	RecAlign(&scrollView->vertScrollGutterRec);
+	
+	scrollView->usableRec = scrollView->mainRec;
+	//TODO: Can we make these scroll bars actually disappear in the layout when they are not needed?
+	scrollView->usableRec.width = scrollView->vertScrollGutterRec.x - scrollView->usableRec.x;
+	scrollView->usableRec.height = scrollView->horiScrollGutterRec.y - scrollView->usableRec.y;
+	RecAlign(&scrollView->usableRec);
+	
+	scrollView->horiScrollBarRec = scrollView->horiScrollGutterRec;
+	r32 scrollableWidth = (scrollView->scrollMax.x - scrollView->scrollMin.x) + scrollView->usableRec.width;
+	r32 horiScrollBarScale = scrollView->usableRec.width / scrollableWidth;
+	scrollView->horiScrollBarRec.width *= horiScrollBarScale;
+	r32 horiScrollBarMoveRoom = scrollView->horiScrollGutterRec.width - scrollView->horiScrollBarRec.width;
+	r32 horiScrollBarScrollAmount = InverseLerpR32(scrollView->scrollMin.x, scrollView->scrollMax.x, scrollView->scroll.x, true);
+	scrollView->horiScrollBarRec.x += horiScrollBarMoveRoom * horiScrollBarScrollAmount;
+	RecAlign(&scrollView->horiScrollBarRec);
+	
+	scrollView->vertScrollBarRec = scrollView->vertScrollGutterRec;
+	r32 scrollableHeight = (scrollView->scrollMax.y - scrollView->scrollMin.y) + scrollView->usableRec.height;
+	r32 vertScrollBarScale = scrollView->usableRec.height / scrollableHeight;
+	scrollView->vertScrollBarRec.height *= vertScrollBarScale;
+	r32 vertScrollBarMoveRoom = scrollView->vertScrollGutterRec.height - scrollView->vertScrollBarRec.height;
+	r32 vertScrollBarScrollAmount = InverseLerpR32(scrollView->scrollMin.y, scrollView->scrollMax.y, scrollView->scroll.y, true);
+	scrollView->vertScrollBarRec.y += vertScrollBarMoveRoom * vertScrollBarScrollAmount;
+	RecAlign(&scrollView->vertScrollBarRec);
 }
 
 void UpdateScrollViewContentSize(ScrollView_t* scrollView, ScrollViewContentSize_f* sizeFunc)
@@ -34,33 +76,33 @@ void UpdateScrollViewContentSize(ScrollView_t* scrollView, ScrollViewContentSize
 	ClampScrollViewScroll(scrollView);
 }
 
+//We sort of expect you to call this every frame, even if you don't move mainRec, so the content gets a chance to update it's size/placement
+void UpdateScrollViewMainRec(ScrollView_t* scrollView, rec mainRec, ScrollViewContentSize_f* sizeFunc)
+{
+	NotNull(scrollView);
+	scrollView->mainRec = mainRec;
+	RecAlign(&scrollView->mainRec);
+	ScrollViewLayout(scrollView);
+	UpdateScrollViewContentSize(scrollView, sizeFunc);
+}
+
 void InitUiScrollView(ScrollView_t* scrollView, rec mainRec = Rec_Zero_Const, ScrollViewContentSize_f* sizeFunc = nullptr)
 {
 	NotNull(scrollView);
 	ClearPointer(scrollView);
 	scrollView->scrollLag = SCROLL_VIEW_DEFAULT_SCROLL_LAG;
 	scrollView->scrollWheelDist = SCROLL_VIEW_DEFAULT_SCROLL_DIST;
-	scrollView->mainRec = mainRec;
-	scrollView->usableRec = scrollView->mainRec;
 	scrollView->contentRec = Rec_Zero;
-	UpdateScrollViewContentSize(scrollView, sizeFunc);
+	UpdateScrollViewMainRec(scrollView, mainRec, sizeFunc);
 	//Start the scroll at the top left of the content
 	scrollView->scroll = scrollView->scrollMin;
 	scrollView->scrollGoto = scrollView->scroll;
 }
 
-//We sort of expect you to call this every frame, even if you don't move mainRec, so the content gets a chance to update it's size/placement
-void UpdateScrollViewMainRec(ScrollView_t* scrollView, rec mainRec, ScrollViewContentSize_f* sizeFunc)
+void UpdateScrollView(ScrollView_t* scrollView, bool isMouseInside, bool isMouseOverHoriScrollbar, bool isMouseOverVertScrollbar)
 {
 	NotNull(scrollView);
-	scrollView->mainRec = mainRec;
-	scrollView->usableRec = scrollView->mainRec;
-	UpdateScrollViewContentSize(scrollView, sizeFunc);
-}
-
-void UpdateScrollView(ScrollView_t* scrollView, bool isMouseInside)
-{
-	NotNull(scrollView);
+	ScrollViewLayout(scrollView);
 	
 	// +==============================+
 	// |      Handle Mouse Wheel      |
@@ -79,12 +121,75 @@ void UpdateScrollView(ScrollView_t* scrollView, bool isMouseInside)
 		}
 	}
 	
+	// +================================================+
+	// | Handle Horizontal Scrollbar Mouse Interaction  |
+	// +================================================+
+	if (scrollView->horiScrollBarGrabbed || isMouseOverHoriScrollbar) { UpdateAnimationUp(&scrollView->horiScrollBarHighlightAnim, UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME); }
+	else { UpdateAnimationDown(&scrollView->horiScrollBarHighlightAnim, UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME); }
+	if (scrollView->horiScrollBarGrabbed)
+	{
+		if (MouseDownRaw(MouseBtn_Left))
+		{
+			HandleMouse(MouseBtn_Left);
+			r32 scrollableAmount = scrollView->horiScrollGutterRec.width - scrollView->horiScrollBarRec.width;
+			r32 newBarX = (MousePos.x - scrollView->horiScrollBarGrabOffset.x) - scrollView->horiScrollGutterRec.x;
+			r32 newScrollPercentage = ClampR32(newBarX / scrollableAmount, 0.0f, 1.0f);
+			scrollView->scrollGoto.x = LerpR32(scrollView->scrollMin.x, scrollView->scrollMax.x, newScrollPercentage);
+		}
+		else
+		{
+			HandleMouse(MouseBtn_Left);
+			scrollView->horiScrollBarGrabbed = false;
+		}
+	}
+	else if (isMouseOverHoriScrollbar)
+	{
+		if (MousePressed(MouseBtn_Left))
+		{
+			HandleMouse(MouseBtn_Left);
+			scrollView->horiScrollBarGrabbed = true;
+			scrollView->horiScrollBarGrabOffset = MousePos - scrollView->horiScrollBarRec.topLeft;
+		}
+	}
+	
+	// +==============================================+
+	// | Handle Vertical Scrollbar Mouse Interaction  |
+	// +==============================================+
+	if (scrollView->vertScrollBarGrabbed || isMouseOverVertScrollbar) { UpdateAnimationUp(&scrollView->vertScrollBarHighlightAnim, UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME); }
+	else { UpdateAnimationDown(&scrollView->vertScrollBarHighlightAnim, UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME); }
+	if (scrollView->vertScrollBarGrabbed)
+	{
+		if (MouseDownRaw(MouseBtn_Left))
+		{
+			HandleMouse(MouseBtn_Left);
+			r32 scrollableAmount = scrollView->vertScrollGutterRec.height - scrollView->vertScrollBarRec.height;
+			r32 newBarY = (MousePos.y - scrollView->vertScrollBarGrabOffset.y) - scrollView->vertScrollGutterRec.y;
+			r32 newScrollPercentage = ClampR32(newBarY / scrollableAmount, 0.0f, 1.0f);
+			scrollView->scrollGoto.y = LerpR32(scrollView->scrollMin.y, scrollView->scrollMax.y, newScrollPercentage);
+		}
+		else
+		{
+			HandleMouse(MouseBtn_Left);
+			scrollView->vertScrollBarGrabbed = false;
+		}
+	}
+	else if (isMouseOverVertScrollbar)
+	{
+		if (MousePressed(MouseBtn_Left))
+		{
+			HandleMouse(MouseBtn_Left);
+			scrollView->vertScrollBarGrabbed = true;
+			scrollView->vertScrollBarGrabOffset = MousePos - scrollView->vertScrollBarRec.topLeft;
+		}
+	}
+	
 	// +==============================+
 	// |        Update Scroll         |
 	// +==============================+
 	if (scrollView->scroll != scrollView->scrollGoto)
 	{
 		v2 delta = (scrollView->scrollGoto - scrollView->scroll);
+		v2 oldScroll = scrollView->scroll;
 		
 		if (AbsR32(delta.x) > SCROLL_VIEW_MIN_DELTA)
 		{
@@ -103,7 +208,34 @@ void UpdateScrollView(ScrollView_t* scrollView, bool isMouseInside)
 		{
 			scrollView->scroll.y = scrollView->scrollGoto.y;
 		}
+		
+		scrollView->scrollChanged = true;
+		scrollView->scrollDelta = scrollView->scroll - oldScroll;
 	}
+	else { scrollView->scrollDelta = Vec2_Zero; }
 	
 	ClampScrollViewScroll(scrollView);
+}
+
+void RenderScrollView(ScrollView_t* scrollView, Color_t backColor, Color_t scrollGutterColor, Color_t scrollBarColor, Color_t scrollBarHighlightColor)
+{
+	ScrollViewLayout(scrollView);
+	
+	rec oldViewport = RcAndViewport(scrollView->mainRec);
+	
+	RcDrawRectangle(scrollView->mainRec, backColor);
+	if (scrollView->scrollMax.x > 0)
+	{
+		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->horiScrollBarGrabbed ? 1.0f : (scrollView->horiScrollBarHighlightAnim * 0.75f));
+		RcDrawRectangle(scrollView->horiScrollGutterRec, scrollGutterColor);
+		RcDrawRectangle(scrollView->horiScrollBarRec, barColor);
+	}
+	if (scrollView->scrollMax.y > 0)
+	{
+		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->vertScrollBarGrabbed ? 1.0f : (scrollView->vertScrollBarHighlightAnim * 0.75f));
+		RcDrawRectangle(scrollView->vertScrollGutterRec, scrollGutterColor);
+		RcDrawRectangle(scrollView->vertScrollBarRec, barColor);
+	}
+	
+	RcSetViewport(oldViewport);
 }
