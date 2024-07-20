@@ -11,7 +11,7 @@ Description:
 #define GAME_WINDOW_ALWAYS_ON_TOP            false
 #define GAME_WINDOW_DEFAULT_RESOLUTION       NewVec2i(1600, 900)
 #define GAME_FOLLOW_SAVED_SETTING_RESOLUTION true
-#define GAME_WINDOW_MIN_SIZE                 NewVec2i(1000, 500)
+#define GAME_WINDOW_MIN_SIZE                 NewVec2i(200, 100)
 #define GAME_ANTI_ALIASING_SAMPLES           4
 #define GAME_THREAD_POOL_SIZE                4 //threads
 #define GAME_FIXED_HEAP_MEM_SIZE             Kilobytes(1024)

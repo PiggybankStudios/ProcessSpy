@@ -11,9 +11,9 @@ Description:
 
 #define RESOURCES_NUM_TEXTURES    9
 #define RESOURCES_NUM_VECTORS     1
-#define RESOURCES_NUM_SHEETS      2
+#define RESOURCES_NUM_SHEETS      4
 #define RESOURCES_NUM_SHADERS     11
-#define RESOURCES_NUM_FONTS       4
+#define RESOURCES_NUM_FONTS       5
 #define RESOURCES_NUM_SOUNDS      1
 #define RESOURCES_NUM_MUSICS      1
 #define RESOURCES_NUM_MODELS      1
@@ -65,6 +65,8 @@ union ATTR_PACKED ResourceSheets_t
 	{
 		SpriteSheet_t vectorIcons64;
 		SpriteSheet_t controllerBtns;
+		SpriteSheet_t fileIcons;
+		SpriteSheet_t buttonIcons;
 	};
 };
 union ATTR_PACKED ResourceShaders_t
@@ -94,6 +96,7 @@ union ATTR_PACKED ResourceFonts_t
 		Font_t pixel;
 		Font_t large;
 		Font_t title;
+		Font_t files;
 	};
 };
 union ATTR_PACKED ResourceSounds_t
@@ -194,6 +197,24 @@ const char* Resources_GetPathForSheet(u64 sheetIndex, ResourceSheetMetaInfo_t* m
 			metaInfo->numFrames = NewVec2i(2, 2);
 			metaInfo->pixelated = false;
 			return RESOURCE_FOLDER_SHEETS "/pig_controller_btns.png";
+		} break;
+		// +==============================+
+		// |          fileIcons           |
+		// +==============================+
+		case 2:
+		{
+			metaInfo->numFrames = NewVec2i(4, 4);
+			metaInfo->pixelated = false;
+			return RESOURCE_FOLDER_SHEETS "/file_icons.png";
+		} break;
+		// +==============================+
+		// |         buttonIcons          |
+		// +==============================+
+		case 3:
+		{
+			metaInfo->numFrames = NewVec2i(2, 2);
+			metaInfo->pixelated = false;
+			return RESOURCE_FOLDER_SHEETS "/button_icons.png";
 		} break;
 		default: Assert(false); return nullptr;
 	}
@@ -462,6 +483,19 @@ const char* Resources_GetPathOrNameForFont(u64 fontIndex, ResourceFontMetaInfo_t
 			metaInfo->requestFromPlatform = true;
 			metaInfo->faces[0].name = NewStr("bold96"); metaInfo->faces[0].size = 128; metaInfo->faces[0].bold = true; metaInfo->faces[0].italic = false; metaInfo->faces[0].bakeSize = NewVec2i(1024, 1024);
 			return "Verdana";
+		} break;
+		// +==============================+
+		// |          filesFont           |
+		// +==============================+
+		case 4:
+		{
+			metaInfo->fontName = "filesFont";
+			metaInfo->requestFromPlatform = true;
+			metaInfo->faces[0].name = NewStr("default18");    metaInfo->faces[0].size = 18; metaInfo->faces[0].bold = false; metaInfo->faces[0].italic = false; metaInfo->faces[0].bakeSize = NewVec2i(1024, 1024); metaInfo->faces[0].includeCyrillicBake = true; metaInfo->faces[0].includeJapaneseKanaBake = true; metaInfo->faces[0].includeBtnsSheet = true;
+			metaInfo->faces[1].name = NewStr("bold18");       metaInfo->faces[1].size = 18; metaInfo->faces[1].bold = true;  metaInfo->faces[1].italic = false; metaInfo->faces[1].bakeSize = NewVec2i(1024, 1024);
+			metaInfo->faces[2].name = NewStr("italic18");     metaInfo->faces[2].size = 18; metaInfo->faces[2].bold = false; metaInfo->faces[2].italic = true;  metaInfo->faces[2].bakeSize = NewVec2i(1024, 1024);
+			metaInfo->faces[3].name = NewStr("bolditalic18"); metaInfo->faces[3].size = 18; metaInfo->faces[3].bold = true;  metaInfo->faces[3].italic = true;  metaInfo->faces[3].bakeSize = NewVec2i(1024, 1024);
+			return "Segoe";
 		} break;
 		default: DebugAssert(false); return nullptr;
 	}
