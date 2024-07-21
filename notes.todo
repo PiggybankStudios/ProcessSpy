@@ -1,17 +1,19 @@
 # TODO List
-	[ ] Scroll to the folder that we just left when going up a folder
+	[ ] Set up the Procmon event firehose
+	[ ] Add list of active processes in the left-side panel
+	[ ] Add editable textbox popup when clicking on current path in the top bar
+	[x] Scroll to the folder that we just left when going up a folder
+	( ) Fix scrolling to a particular item
 	(X) Sometimes the path gets corrupted when moving up folders?
 	[X] Get file icons from Windows
-	[ ] Only render items that are within view (maybe also postpone requesting the icon until they are in view)
+	[X] Only render items that are within view
+	[ ] (maybe also postpone requesting the icon until they are in view)
 	[X] Add a scroll bar to ScrollView_t
 	[ ] Add up/down buttons to ScrollView_t scroll bar gutter
 	[ ] Implement forward/back buttons
-	[ ] Add editable textbox popup when clicking on current path in the top bar
 	[X] Add item hover and selection
 	[X] Add navigation with double click on a folder
 	[X] Add navigation with enter when an item is selected
-	[ ] Add list of active processes in the left-side panel
-	[ ] Set up the Procmon event firehose
 	[ ] Save the sidebarWidth and currentPath to the application settings
 	[?] Add navigation with double click on a link
 	[ ] Remember the scroll value for recently visited folders

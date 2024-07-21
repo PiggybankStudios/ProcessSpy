@@ -50,3 +50,8 @@ This is needed to compile PigGen.exe
 # Dear ImGui
 https://github.com/ocornut/imgui
 imgui folder
+
+# Open Procmon
+https://github.com/progmboy/openprocmon
+procmonsdk folder
++ We only need the "kernel" and "sdk" folders

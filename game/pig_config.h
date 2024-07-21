@@ -27,7 +27,7 @@ Description:
 #define VULKAN_SUPPORTED    0
 #define DIRECTX_SUPPORTED   0
 
-#define PROCMON_SUPPORTED   0
+#define PROCMON_SUPPORTED   1
 #define SOCKETS_SUPPORTED   1
 #define BOX2D_SUPPORTED     0
 #define SLUG_SUPPORTED      0

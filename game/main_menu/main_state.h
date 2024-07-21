@@ -58,6 +58,7 @@ struct MainAppState_t
 	rec backBtnRec;
 	rec forwardBtnRec;
 	rec upBtnRec;
+	rec restartWithAdminBtnRec;
 };
 
 #endif //  _MAIN_STATE_H

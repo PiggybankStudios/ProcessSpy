@@ -11,6 +11,8 @@ Description:
 #include "main_menu/main_helpers.cpp"
 #include "main_menu/file_icon_cache.cpp"
 
+#define RESTART_IN_ADMIN_MODE_MESSAGE "The program needs to be restarted in Administrator Mode so that we can enable the Open Procmon system driver that tracks file access events."
+
 #define PANEL_MARGIN        1   //px
 #define PANEL_DIVIDER_WIDTH 5   //px
 #define MIN_SIDEBAR_WIDTH   100 //px
@@ -290,6 +292,23 @@ void LayoutMainAppState()
 	main->pathTextboxRec.y = main->topbarRec.y + main->topbarRec.height/2 - main->pathTextboxRec.height/2;
 	RecAlign(&main->pathTextboxRec);
 	
+	if (!platInfo->wasRunInAdministratorMode)
+	{
+		v2 adminTextPos = NewVec2(main->sidebarRec.x + 5, main->sidebarRec.y + 5 + RcGetMaxAscend());
+		Vec2Align(&adminTextPos);
+		r32 adminTextMaxWidth = main->sidebarRec.x + main->sidebarRec.width - adminTextPos.x;
+		TextMeasure_t adminTextMeasure = RcMeasureText(NewStr(RESTART_IN_ADMIN_MODE_MESSAGE), adminTextMaxWidth);
+		
+		main->restartWithAdminBtnRec.width = main->sidebarRec.width - 5*2;
+		main->restartWithAdminBtnRec.height = 200;
+		main->restartWithAdminBtnRec.topLeft = main->sidebarRec.topLeft + main->sidebarRec.size/2 - main->restartWithAdminBtnRec.size/2;
+		if (main->restartWithAdminBtnRec.y < adminTextPos.y + adminTextMeasure.size.height - adminTextMeasure.offset.y)
+		{
+			main->restartWithAdminBtnRec.y = adminTextPos.y + adminTextMeasure.size.height - adminTextMeasure.offset.y;
+		}
+		RecAlign(&main->restartWithAdminBtnRec);
+	}
+	
 	UpdateScrollViewMainRec(&main->viewportScroll, main->viewportRec, MainContentSizeFunc);
 }
 
@@ -309,6 +328,10 @@ void CaptureMouseMainAppState()
 	{
 		MouseHitRecNamed(main->viewportScroll.vertScrollBarRec, "ViewportVertScrollBar");
 		MouseHitRecNamed(main->viewportScroll.vertScrollGutterRec, "ViewportVertScrollGutter");
+	}
+	if (!platInfo->wasRunInAdministratorMode)
+	{
+		MouseHitRecNamed(main->restartWithAdminBtnRec, "SidebarRestartWithAdminBtn");
 	}
 	if (IsMouseInsideRec(main->viewportRec))
 	{
@@ -396,7 +419,7 @@ void UpdateMainAppState()
 		// pigOut->cursorType = PlatCursor_Pointer;
 		if (MousePressedAndHandleExtended(MouseBtn_Left))
 		{
-			Unimplemented(); //TODO: Implement me!
+			NotifyWrite_W("This button isn't implemented yet!"); //TODO: Implement me!
 		}
 	}
 	if (IsMouseOverNamed("ForwardBtn"))
@@ -404,7 +427,7 @@ void UpdateMainAppState()
 		// pigOut->cursorType = PlatCursor_Pointer;
 		if (MousePressedAndHandleExtended(MouseBtn_Left))
 		{
-			Unimplemented(); //TODO: Implement me!
+			NotifyWrite_W("This button isn't implemented yet!"); //TODO: Implement me!
 		}
 	}
 	if (IsMouseOverNamed("UpBtn"))
@@ -690,6 +713,39 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		}
 	}
 	RcSetViewport(ScreenRec);
+	
+	// +==============================+
+	// |     Render Process Items     |
+	// +==============================+
+	if (platInfo->wasRunInAdministratorMode)
+	{
+		
+	}
+	else
+	{
+		bool isMouseOverBtn = IsMouseOverNamed("SidebarRestartWithAdminBtn");
+		v2 adminTextPos = NewVec2(main->sidebarRec.x + 5, main->sidebarRec.y + 5 + RcGetMaxAscend());
+		Vec2Align(&adminTextPos);
+		r32 adminTextMaxWidth = main->sidebarRec.x + main->sidebarRec.width - adminTextPos.x;
+		RcDrawText(RESTART_IN_ADMIN_MODE_MESSAGE,
+			adminTextPos,
+			TEXT_COLOR,
+			TextAlignment_Left,
+			adminTextMaxWidth
+		);
+		
+		MyStr_t btnText = NewStr("\bRestart in Administrator Mode\b");
+		r32 btnTextMaxWidth = main->restartWithAdminBtnRec.width - 2*2;
+		TextMeasure_t btnTextMeasure = RcMeasureText(btnText, btnTextMaxWidth);
+		v2 btnTextPos = NewVec2(
+			main->restartWithAdminBtnRec.x + main->restartWithAdminBtnRec.width/2,
+			main->restartWithAdminBtnRec.y + main->restartWithAdminBtnRec.height/2 - btnTextMeasure.size.height/2 + btnTextMeasure.offset.y
+		);
+		Color_t btnColor = isMouseOverBtn ? MonokaiLightRed : MonokaiRed;
+		
+		RcDrawRectangle(main->restartWithAdminBtnRec, btnColor);
+		RcDrawText(btnText, btnTextPos, TEXT_COLOR, TextAlignment_Center, btnTextMaxWidth);
+	}
 	
 	// +==============================+
 	// |      Render ScrollBars       |
