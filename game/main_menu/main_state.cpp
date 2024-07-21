@@ -209,6 +209,7 @@ void MainAppStateAccessResources()
 // +--------------------------------------------------------------+
 void StartMainAppState(AppState_t oldAppState, bool initialize)
 {
+	UNUSED(oldAppState);
 	NotNull(main);
 	MemArena_t* scratch = GetScratchArena();
 	

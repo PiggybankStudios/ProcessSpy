@@ -27,10 +27,13 @@ const char* GetAppStateStr(AppState_t appState)
 
 bool DoesAppStateCoverBelow(AppState_t appState)
 {
+#pragma warning(push)
+#pragma warning(disable: 4065) //switch statement contains 'default' but no 'case' labels
 	switch (appState)
 	{
 		default: return true;
 	}
+#pragma warning(pop)
 }
 
 #endif //  _APP_STATE_LIST_H

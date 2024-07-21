@@ -8,6 +8,9 @@ Description:
 	** See pig_debug_commands.cpp for engine level debug commands
 */
 
+#pragma warning(push)
+#pragma warning(disable: 4100) //'context': unreferenced formal parameter
+
 // +--------------------------------------------------------------+
 // |                       Command Helpers                        |
 // +--------------------------------------------------------------+
@@ -49,6 +52,8 @@ void GameAddDebugVarsToExpContext(ExpContext_t* context) //pre-declared in game_
 {
 	const bool read = false;
 	const bool write = true;
+	UNUSED(read);
+	UNUSED(write);
 	
 	// Constants
 	AddExpConstantDef(context, "version_major", NewExpValueU8(GAME_VERSION_MAJOR));
@@ -60,3 +65,5 @@ void GameAddDebugCommandsToExpContext(ExpContext_t* context) //pre-declared in g
 {
 	AddDebugCommandDef(context, Debug_Test_Def, Debug_Test_Glue, Debug_Test_Desc);
 }
+
+#pragma warning(pop)

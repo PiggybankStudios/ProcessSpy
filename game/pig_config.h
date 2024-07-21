@@ -14,7 +14,7 @@ Description:
 
 //NOTE: These must be 1/0 (not true/false) so the batch file can parse them properly
 
-#define DEBUG_BUILD         1
+#define DEBUG_BUILD         0
 #define ASSERTIONS_ENABLED  1
 #define RUN_PIG_GEN         1
 
