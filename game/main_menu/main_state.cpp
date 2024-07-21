@@ -449,6 +449,13 @@ void UpdateMainAppState()
 			}
 		}
 	}
+	if (IsMouseOverNamed("SidebarRestartWithAdminBtn"))
+	{
+		if (MousePressedAndHandleExtended(MouseBtn_Left))
+		{
+			plat->RestartWithAdminPrivileges();
+		}
+	}
 	
 	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"), IsMouseOverNamed("ViewportHoriScrollBar"), IsMouseOverNamed("ViewportVertScrollBar"));
 	
