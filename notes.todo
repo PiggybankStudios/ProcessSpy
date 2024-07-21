@@ -1,6 +1,6 @@
 # TODO List
-	[ ] Set up the Procmon event firehose
-	[ ] Add list of active processes in the left-side panel
+	[X] Set up the Procmon event firehose
+	[X] Add list of active processes in the left-side panel
 	[ ] Add editable textbox popup when clicking on current path in the top bar
 	[x] Scroll to the folder that we just left when going up a folder
 	( ) Fix scrolling to a particular item
@@ -17,3 +17,13 @@
 	[ ] Save the sidebarWidth and currentPath to the application settings
 	[?] Add navigation with double click on a link
 	[ ] Remember the scroll value for recently visited folders
+	[ ] Add scrolling support to the process list in the sidebar
+	[ ] Add checkboxes to the process items so you can enable/disable seeing that particular process
+	[ ] Add hover highlighting so you can see which icons match in main viewport and process list
+	[ ] Add Play/Pause button
+	[ ] Sort process icons on each item based on access time
+	[ ] Animate process appearing, access event, and sorting
+	[ ] Show indicators of accesses to items that above/below the currently visible section of items
+	[ ] Hide ProcessSpy.exe file access events (we are accessing files to ask for icons, and of course to populate items in a folder)
+	[ ] De-dupe application icons (maybe it's sub-processes that are making duplicate process IDs?)
+	[ ] 

@@ -158,6 +158,7 @@ if "%PROCMON_SUPPORTED%"=="1" (
 	set CompilerFlags=%CompilerFlags% -DUNICODE -D_UNICODE
 	set IncludeDirectories=%IncludeDirectories% /I"%LibDirectory%\include\procmonsdk\sdk\procmonsdk"
 	set PlatformLibraries=%PlatformLibraries% procmonsdk.lib winspool.lib
+	set EngineDllExports=%EngineDllExports% /EXPORT:Pig_HandleProcmonEvent
 )
 if "%OPENGL_SUPPORTED%"=="1" (
 	set Libraries=%Libraries% opengl32.lib

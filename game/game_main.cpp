@@ -9,11 +9,14 @@ Description:
 #include "app_func_defs.h"
 #include "game_startup_options.cpp"
 
+#include "file_icon_cache.cpp"
+
 #include "main_menu/main_state.cpp"
 #include "app_state_list.cpp"
 
 #include "game_settings.cpp"
 #include "game_tasks.cpp"
+#include "game_process_events.cpp"
 #include "game_debug_commands.cpp"
 #include "imgui/imgui_windows.cpp"
 
@@ -24,7 +27,7 @@ void GameInitAppGlobals(AppGlobals_t* globals) //pre-declared in pig_func_defs.h
 {
 	NotNull(globals);
 	ClearPointer(globals);
-	//TODO: Implement me!
+	InitProcmonInfo(&globals->procmon);
 }
 
 //NOTE: GameLoadSettings is in game_settings.cpp
@@ -163,6 +166,12 @@ void GamePrepareForClose() //pre-declared in pig_func_defs.h
 {
 	Pig_ChangeWindow(platInfo->mainWindow);
 	GameSaveSettings();
+}
+
+//NOTE: We are on a non-main thread here, be careful what we do
+void GameHandleProcmonEvent(ProcmonEvent_t* event)
+{
+	HandleProcmonEvent(&gl->procmon, event);
 }
 
 // +--------------------------------------------------------------+

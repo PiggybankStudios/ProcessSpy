@@ -9,7 +9,6 @@ Description:
 #include "ui/ui_scroll_view.cpp"
 
 #include "main_menu/main_helpers.cpp"
-#include "main_menu/file_icon_cache.cpp"
 
 #define RESTART_IN_ADMIN_MODE_MESSAGE "The program needs to be restarted in Administrator Mode so that we can enable the Open Procmon system driver that tracks file access events."
 
@@ -41,6 +40,7 @@ Description:
 void FreeFolderFileItem(MemArena_t* allocArena, FolderFileItem_t* item)
 {
 	NotNull2(allocArena, item);
+	FreeVarArray(&item->processRefs);
 	FreeString(allocArena, &item->name);
 	FreeString(allocArena, &item->path);
 	ClearPointer(item);
@@ -114,6 +114,7 @@ void UpdateFolderFileItemsAtCurrentPath()
 		newFolderItem->name = AllocString(mainHeap, &folderName);
 		newFolderItem->path = PrintInArenaStr(mainHeap, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(folderName));
 		newFolderItem->iconId = 0;
+		CreateVarArray(&newFolderItem->processRefs, mainHeap, sizeof(ItemProcessRef_t));
 		numFolders++;
 	}
 	
@@ -130,6 +131,7 @@ void UpdateFolderFileItemsAtCurrentPath()
 		newFileItem->path = PrintInArenaStr(mainHeap, "%.*s/%.*s", StrPrint(main->currentPath), StrPrint(fileName));
 		newFileItem->iconId = plat->GetFileIconId(newFileItem->path);
 		newFileItem->fileIcon = FindFileIconById(&main->iconCache, newFileItem->iconId, newFileItem->path);
+		CreateVarArray(&newFileItem->processRefs, mainHeap, sizeof(ItemProcessRef_t));
 		numFiles++;
 	}
 	
@@ -183,6 +185,13 @@ void MoveToPath(MyStr_t newPath)
 		}
 	}
 	FreeString(mainHeap, &oldPath);
+	
+	if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
+	{
+		FreeString(mainHeap, &gl->procmon.eventPathFilter);
+		gl->procmon.eventPathFilter = AllocString(mainHeap, &main->currentPath);
+		plat->UnlockMutex(&gl->procmon.mutex);
+	}
 }
 
 // +--------------------------------------------------------------+
@@ -529,6 +538,40 @@ void UpdateMainAppState()
 	}
 	
 	// +==============================+
+	// |  Consume Item Access Events  |
+	// +==============================+
+	if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
+	{
+		VarArrayLoop(&gl->procmon.itemEvents, eIndex)
+		{
+			VarArrayLoopGet(ProcmonItemEvent_t, event, &gl->procmon.itemEvents, eIndex);
+			VarArrayLoop(&main->items, iIndex)
+			{
+				VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
+				if (StrEqualsIgnoreCase(item->name, event->itemName))
+				{
+					ItemProcessRef_t* processRef = FindItemProcessRef(item, event->process);
+					if (processRef == nullptr)
+					{
+						processRef = VarArrayAdd(&item->processRefs, ItemProcessRef_t);
+						NotNull(processRef);
+						ClearPointer(processRef);
+						processRef->process = event->process;
+					}
+					processRef->numEvents++;
+					processRef->numEventsSinceLastFrame++;
+					processRef->lastAccessTime = ProgramTime;
+				}
+			}
+			
+			FreeString(&gl->procmon.heap, &event->itemName);
+		}
+		VarArrayClear(&gl->procmon.itemEvents);
+		
+		plat->UnlockMutex(&gl->procmon.mutex);
+	}
+	
+	// +==============================+
 	// |         Update Items         |
 	// +==============================+
 	VarArrayLoop(&main->items, iIndex)
@@ -536,6 +579,9 @@ void UpdateMainAppState()
 		VarArrayLoopGet(FolderFileItem_t, item, &main->items, iIndex);
 		item->isHovered = IsMouseOverPrint("ViewportItem%llu", iIndex);
 		
+		// +==============================+
+		// |     Handle Item Clicked      |
+		// +==============================+
 		if (item->isHovered && MousePressedAndHandleExtended(MouseBtn_Left))
 		{
 			if (KeyDownRaw(Key_Shift) && main->primarySelectedItemIndex >= 0)
@@ -717,6 +763,25 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			RcDrawText(item->name, namePos, nameColor);
 			
 			RcSetViewport(oldViewportRec);
+			
+			if (item->processRefs.length > 0)
+			{
+				rec processIconRec = NewRec(rc->flowInfo.endPos.x + 5, mainRec.y + mainRec.height/2 - 16, 32, 32);
+				VarArrayLoop(&item->processRefs, pIndex)
+				{
+					VarArrayLoopGet(ItemProcessRef_t, processRef, &item->processRefs, pIndex);
+					if (processRef->process->icon != nullptr && processRef->process->icon->texture.isValid)
+					{
+						RcBindTexture1(&processRef->process->icon->texture);
+						RcDrawTexturedRectangle(processIconRec, White);
+					}
+					else
+					{
+						RcDrawRectangle(processIconRec, GetPredefPalColorByIndex(pIndex));
+					}
+					processIconRec.x += processIconRec.width + 2;
+				}
+			}
 		}
 	}
 	RcSetViewport(ScreenRec);
@@ -726,7 +791,44 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// +==============================+
 	if (platInfo->wasRunInAdministratorMode)
 	{
-		
+		RcSetViewport(main->sidebarRec);
+		rec iconRec = NewRec(main->sidebarRec.topLeft + NewVec2(5, 5), 32, 32);
+		for (u64 pIndex = 0; pIndex < gl->procmon.processes.length; pIndex++)
+		{
+			if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
+			{
+				ProcmonProcess_t* process = BktArrayGetHard(&gl->procmon.processes, ProcmonProcess_t, pIndex);
+				plat->UnlockMutex(&gl->procmon.mutex);
+				
+				if (!process->triedToLoadIcon)
+				{
+					u64 iconId = plat->GetFileIconId(process->exePath);
+					process->icon = FindFileIconById(&main->iconCache, iconId, process->exePath);
+					process->triedToLoadIcon = true;
+				}
+				
+				v2 namePos = NewVec2(
+					iconRec.x + iconRec.width + 2,
+					iconRec.y + iconRec.height/2 - RcGetLineHeight()/2 + RcGetMaxAscend()
+				);
+				Vec2Align(&namePos);
+				
+				if (process->icon != nullptr && process->icon->texture.isValid)
+				{
+					RcBindTexture1(&process->icon->texture);
+					RcDrawTexturedRectangle(iconRec, White);
+				}
+				else
+				{
+					RcDrawRectangle(iconRec, HIGHLIGHT_COLOR);
+				}
+				RcDrawTextPrint(namePos, TEXT_COLOR, "[0x%04X] %.*s (%llu+%llu)", process->id, StrPrint(process->name), process->numEvents, process->eventsSinceLastFrame);
+				process->eventsSinceLastFrame = 0;
+				
+				iconRec.y += iconRec.height + 5;
+			}
+		}
+		RcSetViewport(ScreenRec);
 	}
 	else
 	{
@@ -742,16 +844,22 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		);
 		
 		MyStr_t btnText = NewStr("\bRestart in Administrator Mode\b");
-		r32 btnTextMaxWidth = main->restartWithAdminBtnRec.width - 2*2;
+		r32 btnTextMaxWidth = main->restartWithAdminBtnRec.width - pig->resources.sheets->buttonIcons.frameSize.width*2;
 		TextMeasure_t btnTextMeasure = RcMeasureText(btnText, btnTextMaxWidth);
 		v2 btnTextPos = NewVec2(
 			main->restartWithAdminBtnRec.x + main->restartWithAdminBtnRec.width/2,
 			main->restartWithAdminBtnRec.y + main->restartWithAdminBtnRec.height/2 - btnTextMeasure.size.height/2 + btnTextMeasure.offset.y
 		);
-		Color_t btnColor = isMouseOverBtn ? MonokaiLightRed : MonokaiRed;
+		Color_t btnColor = isMouseOverBtn ? SELECTED_ITEM_COLOR : HIGHLIGHT_COLOR;
+		rec shieldIconRec = NewRec(btnTextPos, ToVec2(pig->resources.sheets->buttonIcons.frameSize));
 		
 		RcDrawRectangle(main->restartWithAdminBtnRec, btnColor);
 		RcDrawText(btnText, btnTextPos, TEXT_COLOR, TextAlignment_Center, btnTextMaxWidth);
+		
+		shieldIconRec.x = rc->flowInfo.renderRec.x - shieldIconRec.width;
+		shieldIconRec.y = btnTextPos.y - shieldIconRec.height;
+		RcBindSpriteSheet(&pig->resources.sheets->buttonIcons);
+		RcDrawSheetFrame(NewVec2i(1, 1), shieldIconRec, White);
 	}
 	
 	// +==============================+

@@ -8,7 +8,14 @@ Date:   07\02\2024
 #define _MAIN_STATE_H
 
 #include "ui/ui_scroll_view.h"
-#include "main_menu/file_icon_cache.h"
+
+struct ItemProcessRef_t
+{
+	u64 numEvents;
+	u64 numEventsSinceLastFrame;
+	u64 lastAccessTime;
+	ProcmonProcess_t* process;
+};
 
 struct FolderFileItem_t
 {
@@ -22,6 +29,8 @@ struct FolderFileItem_t
 	bool isSelected;
 	u64 lastClickTime;
 	u64 quickClickCount;
+	
+	VarArray_t processRefs; //ItemProcessRef_t
 	
 	TextMeasure_t nameMeasure;
 	rec mainRec;

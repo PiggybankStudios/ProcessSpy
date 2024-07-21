@@ -13,6 +13,8 @@ Description:
 #include "game_defines.h"
 
 #include "game_tasks.h"
+#include "file_icon_cache.h"
+#include "game_process_events.h"
 
 #include "app_state_list.h"
 #include "main_menu/main_state.h"
@@ -28,7 +30,7 @@ struct AppStateStructs_t
 
 struct AppGlobals_t
 {
-	bool placeholder; //TODO: Remove me!
+	ProcmonInfo_t procmon;
 };
 
 static AppGlobals_t*   gl   = nullptr;
