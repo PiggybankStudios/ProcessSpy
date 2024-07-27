@@ -221,7 +221,7 @@ void StartMainAppState(AppState_t oldAppState, bool initialize)
 		ClearPointer(main);
 		
 		CreateVarArray(&main->items, mainHeap, sizeof(FolderFileItem_t));
-		InitUiDivider(&main->sidebarDivider, true, true, 0.25f, ScreenRec);
+		InitUiDivider(&main->sidebarDivider, true, false, 0.25f, ScreenRec);
 		main->sidebarDivider.minLeftSizePx = MIN_SIDEBAR_WIDTH;
 		main->sidebarDivider.minRightSizePx = MIN_VIEWPORT_WIDTH;
 		InitUiScrollView(&main->viewportScroll);
@@ -643,8 +643,6 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	
 	RcDrawRectangle(main->topbarRec, PANEL_BACK_COLOR);
 	
-	RenderUiDivider(&main->sidebarDivider, DIVIDER_COLOR);
-	
 	// +==============================+
 	// |         Render Items         |
 	// +==============================+
@@ -865,6 +863,8 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		RcDrawText("/", piecePos, pieceColor);
 		piecePos.x = rc->flowInfo.endPos.x + PATH_PIECE_MARGIN;
 	}
+	
+	RenderUiDivider(&main->sidebarDivider, DIVIDER_COLOR);
 	
 	// +==============================+
 	// | Render Assertion Status Text |

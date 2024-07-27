@@ -8,6 +8,13 @@ Description:
 	** split between the two sections
 */
 
+//TODO: Add an option to prefer left or right size restriction
+//TODO: Add an option to disable left or right side, while maintaining the split value
+//TODO: Finish up the rendering options for the panel, we don't really have a strong opinion yet on how the dividing line should be drawn. We just draw a 2px wide line right now
+//TODO: When operating in non-proportional mode, we should have the option to make the split value be a px distance from the right/bottom side (right now it's always based on left/top side)
+//TODO: Add the option to disable user control for dragging the divider
+//TODO: Add an option to animate the divider from the current position to another position over time
+
 #define DEFAULT_DIVIDER_HIT_WIDTH   5 //px
 
 void UiDividerApplySplitRestrictions(UiDivider_t* divider)
@@ -156,25 +163,13 @@ void UpdateUiDivider(UiDivider_t* divider)
 		
 		HandleMouse(MouseBtn_Left);
 	}
-	
-	
-	// +==============================+
-	// |     Handle Window Resize     |
-	// +==============================+
-	// if (pig->currentWindow->input.resized)
-	// {
-	// 	if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
-	// 	if (main->sidebarWidth < main->userSetSidebarWidth) { main->sidebarWidth = main->userSetSidebarWidth; }
-	// 	if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH)
-	// 	{
-	// 		main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH;
-	// 		if (main->sidebarWidth < 10) { main->sidebarWidth = 10; }
-	// 	}
-	// }
 }
 
 void RenderUiDivider(UiDivider_t* divider, Color_t dividerColor)
 {
 	LayoutUiDivider(divider);
-	RcDrawRectangle(divider->dividerHitRec + divider->mainRec.topLeft, dividerColor);
+	rec renderRec = divider->dividerRec + divider->mainRec.topLeft;
+	if (divider->isHorizontal) { renderRec = RecInflateX(renderRec, 1); }
+	else { renderRec = RecInflateY(renderRec, 1); }
+	RcDrawRectangle(renderRec, dividerColor);
 }
