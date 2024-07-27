@@ -27,17 +27,6 @@ Description:
 #define ITEM_INNER_PADDING_TOP_BOTTOM  3 //px
 #define INTER_BTN_MARGIN               4
 
-#define PANEL_BACK_COLOR    NewColor(50, 50, 50) //0xFF323232
-#define PANEL_OUTLINE_COLOR NewColor(85, 85, 85) //0xFF555555
-#define DIVIDER_COLOR       NewColor(43, 43, 43) //0xFF2B2B2B (also used for scroll gutter)
-#define HEADER_BACK_COLOR   NewColor(64, 67, 70) //0xFF404346 (also used for scroll bar)
-#define TEXT_COLOR          NewColor(242, 242, 242) //0xFFF2F2F2
-#define TEXT_GREY_COLOR     NewColor(128, 128, 128) //0xFF808080
-#define SELECTED_ITEM_COLOR NewColor(152, 118, 170) //0xFF9876AA
-#define RULER_COLOR         NewColor(57, 57, 57) //0xFF393939
-#define BTN_HOVER_COLOR     NewColor(76, 67, 80) //0xFF4C4350
-#define HIGHLIGHT_COLOR     NewColor(119, 99, 132) //0xFF776384
-
 void FreeFolderFileItem(MemArena_t* allocArena, FolderFileItem_t* item)
 {
 	NotNull2(allocArena, item);
@@ -627,12 +616,12 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// |        Render Panels         |
 	// +==============================+
 	rec sidebarRec = main->sidebarDivider.leftRec + main->sidebarDivider.mainRec.topLeft;
-	RcDrawRectangle(sidebarRec, PANEL_BACK_COLOR);
-	RcDrawRectangleOutline(sidebarRec, PANEL_OUTLINE_COLOR, 1);
+	RcDrawRectangle(sidebarRec, pig->theme.background);
+	RcDrawRectangleOutline(sidebarRec, pig->theme.panelOutline, 1);
 	
-	RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
+	RcDrawRectangle(main->viewportRec, pig->theme.background);
 	
-	RcDrawRectangle(main->topbarRec, PANEL_BACK_COLOR);
+	RcDrawRectangle(main->topbarRec, pig->theme.background);
 	
 	// +==============================+
 	// |         Render Items         |
@@ -662,7 +651,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 				builtinIconFrame = IsEmptyStr(extensionStr) ? NewVec2i(0, 0) : NewVec2i(1, 0);
 			}
 			bool isHidden = StrStartsWith(item->name, ".");
-			Color_t nameColor = TEXT_COLOR;
+			Color_t nameColor = pig->theme.text;
 			Color_t iconColor = White;
 			Texture_t* osIconTexture = nullptr;
 			if (item->fileIcon != nullptr)
@@ -675,22 +664,22 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			}
 			if (isHidden && !item->isHovered && !item->isSelected)
 			{
-				nameColor = TEXT_GREY_COLOR;
+				nameColor = pig->theme.textFaded;
 				iconColor = ColorTransparent(iconColor, 0.75f);
 			}
 			
 			// RcDrawRectangle(mainRec, (iIndex%2) ? MonokaiGray2 : MonokaiGray1);
 			if (item->isSelected)
 			{
-				RcDrawRectangle(hitRec, SELECTED_ITEM_COLOR);
+				RcDrawRectangle(hitRec, pig->theme.selected);
 			}
 			else if (item->isHovered)
 			{
-				RcDrawRectangle(hitRec, HIGHLIGHT_COLOR);
+				RcDrawRectangle(hitRec, pig->theme.highlight);
 			}
 			else if (main->primarySelectedItemIndex >= 0 && (u64)main->primarySelectedItemIndex == iIndex)
 			{
-				RcDrawRectangleOutline(hitRec, HIGHLIGHT_COLOR, 1);
+				RcDrawRectangleOutline(hitRec, pig->theme.highlight, 1);
 			}
 			
 			rec oldViewportRec = RcAndViewport(mainRec);
@@ -768,9 +757,9 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 				}
 				else
 				{
-					RcDrawRectangle(iconRec, HIGHLIGHT_COLOR);
+					RcDrawRectangle(iconRec, pig->theme.highlight);
 				}
-				RcDrawTextPrint(namePos, TEXT_COLOR, "[0x%04X] %.*s (%llu+%llu)", process->id, StrPrint(process->name), process->numEvents, process->eventsSinceLastFrame);
+				RcDrawTextPrint(namePos, pig->theme.text, "[0x%04X] %.*s (%llu+%llu)", process->id, StrPrint(process->name), process->numEvents, process->eventsSinceLastFrame);
 				process->eventsSinceLastFrame = 0;
 				
 				iconRec.y += iconRec.height + 5;
@@ -786,7 +775,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		r32 adminTextMaxWidth = sidebarRec.x + sidebarRec.width - adminTextPos.x;
 		RcDrawText(RESTART_IN_ADMIN_MODE_MESSAGE,
 			adminTextPos,
-			TEXT_COLOR,
+			pig->theme.text,
 			TextAlignment_Left,
 			adminTextMaxWidth
 		);
@@ -798,11 +787,11 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			main->restartWithAdminBtnRec.x + main->restartWithAdminBtnRec.width/2,
 			main->restartWithAdminBtnRec.y + main->restartWithAdminBtnRec.height/2 - btnTextMeasure.size.height/2 + btnTextMeasure.offset.y
 		);
-		Color_t btnColor = isMouseOverBtn ? SELECTED_ITEM_COLOR : HIGHLIGHT_COLOR;
+		Color_t btnColor = isMouseOverBtn ? pig->theme.selected : pig->theme.highlight;
 		rec shieldIconRec = NewRec(btnTextPos, ToVec2(pig->resources.sheets->buttonIcons.frameSize));
 		
 		RcDrawRectangle(main->restartWithAdminBtnRec, btnColor);
-		RcDrawText(btnText, btnTextPos, TEXT_COLOR, TextAlignment_Center, btnTextMaxWidth);
+		RcDrawText(btnText, btnTextPos, pig->theme.text, TextAlignment_Center, btnTextMaxWidth);
 		
 		shieldIconRec.x = rc->flowInfo.renderRec.x - shieldIconRec.width;
 		shieldIconRec.y = btnTextPos.y - shieldIconRec.height;
@@ -814,8 +803,8 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// +==============================+
 	// |      Render ScrollBars       |
 	// +==============================+
-	RcDrawRectangleOutline(main->viewportRec, PANEL_OUTLINE_COLOR, 1);
-	RenderUiScrollView(&main->viewportScroll, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
+	RcDrawRectangleOutline(main->viewportRec, pig->theme.panelOutline, 1);
+	RenderUiScrollView(&main->viewportScroll);
 	
 	// +==============================+
 	// |    Render Topbar Buttons     |
@@ -833,11 +822,11 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 			case 2: btnRec = main->upBtnRec;      btnHoverName = "UpBtn";      iconFrame = NewVec2i(0, 1); isEnabled = true;  break;
 		}
 		bool isHovered = IsMouseOverNamed(btnHoverName);
-		Color_t backColor = (isHovered && isEnabled) ? BTN_HOVER_COLOR : Transparent;
+		Color_t backColor = (isHovered && isEnabled) ? pig->theme.hover : Transparent;
 		
 		RcDrawRectangle(RecInflate(btnRec, INTER_BTN_MARGIN/2, 0), backColor);
 		RcBindSpriteSheet(&pig->resources.sheets->buttonIcons);
-		RcDrawSheetFrame(iconFrame, btnRec, isEnabled ? TEXT_COLOR : TEXT_GREY_COLOR);
+		RcDrawSheetFrame(iconFrame, btnRec, isEnabled ? pig->theme.text : pig->theme.textFaded);
 	}
 	
 	// RcDrawRectangle(main->pathTextboxRec, MonokaiGray1);
@@ -847,14 +836,14 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	MyStr_t* pathPieces = SplitString(scratch, main->currentPath, "/", &numPathPieces);
 	for (u64 pIndex = 0; pIndex < numPathPieces; pIndex++)
 	{
-		Color_t pieceColor = (pIndex == numPathPieces-1) ? TEXT_COLOR : TEXT_GREY_COLOR;
+		Color_t pieceColor = (pIndex == numPathPieces-1) ? pig->theme.text : pig->theme.textFaded;
 		RcDrawText(pathPieces[pIndex], piecePos, pieceColor);
 		piecePos.x = rc->flowInfo.endPos.x + PATH_PIECE_MARGIN;
 		RcDrawText("/", piecePos, pieceColor);
 		piecePos.x = rc->flowInfo.endPos.x + PATH_PIECE_MARGIN;
 	}
 	
-	RenderUiDivider(&main->sidebarDivider, DIVIDER_COLOR);
+	RenderUiDivider(&main->sidebarDivider, pig->theme.backgroundDark);
 	
 	// +==============================+
 	// | Render Assertion Status Text |

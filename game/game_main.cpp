@@ -88,6 +88,13 @@ void GameGeneralInit() //pre-declared in pig_func_defs.h
 	
 	GameParseSettings();
 	
+	pig->theme = {};
+	pig->theme.background = NewColor(0xFF323232);
+	pig->theme.text       = NewColor(0xFFF2F2F2);
+	pig->theme.foreground = NewColor(0xFF404346);
+	pig->theme.selected   = NewColor(0xFF9876AA);
+	FillTheme(&pig->theme);
+	
 	AppState_t firstAppState = GAME_INITIAL_APP_STATE;
 	PrintLine_N("First AppState is %s", GetAppStateStr(firstAppState));
 	PushAppState(firstAppState);

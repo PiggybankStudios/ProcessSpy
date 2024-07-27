@@ -23,6 +23,7 @@ struct ScrollView_t
 	v2 scrollMax;
 	r32 scrollLag;
 	r32 scrollWheelDist; //px/notch
+	r32 gutterWidth;
 	
 	v2 scroll;
 	v2 scrollGoto;
@@ -42,6 +43,15 @@ struct ScrollView_t
 	rec horiScrollGutterRec;
 	rec vertScrollBarRec;
 	rec vertScrollGutterRec;
+};
+
+struct UiScrollViewTheme_t
+{
+	bool isFilled;
+	Color_t scrollGutter;
+	Color_t scrollBar;
+	Color_t scrollBarHighlight;
+	Color_t scrollCornerSquare;
 };
 
 #endif //  _UI_SCROLL_VIEW_H

@@ -11,7 +11,7 @@ Description:
 	** be put inside a scroll view, but it also puts the burden on the caller to route info around.
 */
 
-#define UI_SCROLL_VIEW_GUTTER_WIDTH               20 //px
+#define UI_SCROLL_VIEW_DEFAULT_GUTTER_WIDTH       20 //px
 #define UI_SCROLL_VIEW_SCROLLBAR_HIGHLIGHT_TIME   300 //ms
 
 //TODO: Horizontal scroll bar overlaps vertical scroll bar in bottom right
@@ -30,13 +30,13 @@ void LayoutUiScrollView(ScrollView_t* scrollView)
 	bool isHoriScrollBarVisible = (scrollView->scrollMax.x > scrollView->scrollMin.x);
 	bool isVertScrollBarVisible = (scrollView->scrollMax.y > scrollView->scrollMin.y);
 	
-	scrollView->horiScrollGutterRec.height = UI_SCROLL_VIEW_GUTTER_WIDTH;
+	scrollView->horiScrollGutterRec.height = scrollView->gutterWidth;
 	scrollView->horiScrollGutterRec.x = scrollView->mainRec.x;
 	scrollView->horiScrollGutterRec.y = (scrollView->mainRec.y + scrollView->mainRec.height) - scrollView->horiScrollGutterRec.height;
 	scrollView->horiScrollGutterRec.width = scrollView->mainRec.width;
 	RecAlign(&scrollView->horiScrollGutterRec);
 	
-	scrollView->vertScrollGutterRec.width = UI_SCROLL_VIEW_GUTTER_WIDTH;
+	scrollView->vertScrollGutterRec.width = scrollView->gutterWidth;
 	scrollView->vertScrollGutterRec.x = (scrollView->mainRec.x + scrollView->mainRec.width) - scrollView->vertScrollGutterRec.width;
 	scrollView->vertScrollGutterRec.y = scrollView->mainRec.y;
 	scrollView->vertScrollGutterRec.height = scrollView->mainRec.height;
@@ -112,6 +112,7 @@ void InitUiScrollView(ScrollView_t* scrollView, rec mainRec = Rec_Zero_Const, Sc
 	//Start the scroll at the top left of the content
 	scrollView->scroll = scrollView->scrollMin;
 	scrollView->scrollGoto = scrollView->scroll;
+	scrollView->gutterWidth = UI_SCROLL_VIEW_DEFAULT_GUTTER_WIDTH;
 }
 
 void UiScrollViewCaptureMouse(ScrollView_t* scrollView, bool captureBackground = false)
@@ -251,8 +252,24 @@ void UpdateUiScrollView(ScrollView_t* scrollView, bool overrideIsMouseOver = fal
 	ClampUiScrollViewScroll(scrollView);
 }
 
-void RenderUiScrollView(ScrollView_t* scrollView, Color_t scrollGutterColor, Color_t scrollBarColor, Color_t scrollBarHighlightColor)
+void FillTheme(UiScrollViewTheme_t* theme, GlobalTheme_t* globalTheme = nullptr)
 {
+	NotNull(theme);
+	if (globalTheme == nullptr) { globalTheme = &pig->theme; }
+	Assert(theme->isFilled == false);
+	DeriveThemeColor(&theme->scrollGutter,       globalTheme->backgroundDark);
+	DeriveThemeColor(&theme->scrollBar,          globalTheme->foreground);
+	DeriveThemeColor(&theme->scrollBarHighlight, globalTheme->highlight);
+	DeriveThemeColor(&theme->scrollCornerSquare, globalTheme->foreground);
+	theme->isFilled = true;
+}
+
+void RenderUiScrollView(ScrollView_t* scrollView, UiScrollViewTheme_t* theme = nullptr)
+{
+	UiScrollViewTheme_t localTheme = {};
+	if (theme == nullptr) { theme = &localTheme; }
+	if (!theme->isFilled) { FillTheme(theme); }
+	
 	LayoutUiScrollView(scrollView);
 	bool isHoriScrollBarVisible = (scrollView->scrollMax.x > scrollView->scrollMin.x);
 	bool isVertScrollBarVisible = (scrollView->scrollMax.y > scrollView->scrollMin.y);
@@ -261,14 +278,14 @@ void RenderUiScrollView(ScrollView_t* scrollView, Color_t scrollGutterColor, Col
 	
 	if (isHoriScrollBarVisible)
 	{
-		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->horiScrollBarGrabbed ? 1.0f : (scrollView->horiScrollBarHighlightAnim * 0.75f));
-		RcDrawRectangle(scrollView->horiScrollGutterRec, scrollGutterColor);
+		Color_t barColor = ColorLerp(theme->scrollBar, theme->scrollBarHighlight, scrollView->horiScrollBarGrabbed ? 1.0f : (scrollView->horiScrollBarHighlightAnim * 0.75f));
+		RcDrawRectangle(scrollView->horiScrollGutterRec, theme->scrollGutter);
 		RcDrawRectangle(scrollView->horiScrollBarRec, barColor);
 	}
 	if (isVertScrollBarVisible)
 	{
-		Color_t barColor = ColorLerp(scrollBarColor, scrollBarHighlightColor, scrollView->vertScrollBarGrabbed ? 1.0f : (scrollView->vertScrollBarHighlightAnim * 0.75f));
-		RcDrawRectangle(scrollView->vertScrollGutterRec, scrollGutterColor);
+		Color_t barColor = ColorLerp(theme->scrollBar, theme->scrollBarHighlight, scrollView->vertScrollBarGrabbed ? 1.0f : (scrollView->vertScrollBarHighlightAnim * 0.75f));
+		RcDrawRectangle(scrollView->vertScrollGutterRec, theme->scrollGutter);
 		RcDrawRectangle(scrollView->vertScrollBarRec, barColor);
 	}
 	if (isHoriScrollBarVisible && isVertScrollBarVisible)
@@ -280,7 +297,7 @@ void RenderUiScrollView(ScrollView_t* scrollView, Color_t scrollGutterColor, Col
 			scrollView->horiScrollGutterRec.height
 		);
 		RecAlign(&cornerRec);
-		RcDrawRectangle(cornerRec, scrollBarColor);
+		RcDrawRectangle(cornerRec, theme->scrollCornerSquare);
 	}
 	
 	RcSetViewport(oldViewport);
