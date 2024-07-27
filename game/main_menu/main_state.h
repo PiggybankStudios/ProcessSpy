@@ -8,6 +8,7 @@ Date:   07\02\2024
 #define _MAIN_STATE_H
 
 #include "ui/ui_scroll_view.h"
+#include "ui/ui_divider.h"
 
 struct ItemProcessRef_t
 {
@@ -53,15 +54,9 @@ struct MainAppState_t
 	VarArray_t items; //FolderFileItem_t
 	FileIconCache_t iconCache;
 	
-	r32 sidebarWidth;
-	r32 userSetSidebarWidth;
-	bool resizingSidebar;
-	r32 resizingSidebarGrabOffset;
-	
-	rec sidebarRec;
-	rec topbarRec;
-	rec dividerRec;
+	UiDivider_t sidebarDivider;
 	rec viewportRec;
+	rec topbarRec;
 	ScrollView_t viewportScroll;
 	rec pathTextboxRec;
 	rec backBtnRec;

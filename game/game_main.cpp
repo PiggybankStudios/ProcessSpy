@@ -27,7 +27,9 @@ void GameInitAppGlobals(AppGlobals_t* globals) //pre-declared in pig_func_defs.h
 {
 	NotNull(globals);
 	ClearPointer(globals);
+	#if PROCMON_SUPPORTED
 	InitProcmonInfo(&globals->procmon);
+	#endif
 }
 
 //NOTE: GameLoadSettings is in game_settings.cpp
@@ -168,11 +170,13 @@ void GamePrepareForClose() //pre-declared in pig_func_defs.h
 	GameSaveSettings();
 }
 
+#if PROCMON_SUPPORTED
 //NOTE: We are on a non-main thread here, be careful what we do
 void GameHandleProcmonEvent(ProcmonEvent_t* event)
 {
 	HandleProcmonEvent(&gl->procmon, event);
 }
+#endif
 
 // +--------------------------------------------------------------+
 // |                    Function Table Filling                    |

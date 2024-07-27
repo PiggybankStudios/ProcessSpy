@@ -7,6 +7,8 @@ Description:
 	** and store them safely into data structures that we can access from the main thread
 */
 
+#if PROCMON_SUPPORTED
+
 #define PROCMON_HEAP_SIZE          Megabytes(1)
 #define PROCMON_MAX_EVENTS_QUEUED  1000 //events/frame
 
@@ -81,3 +83,5 @@ void HandleProcmonEvent(ProcmonInfo_t* procmon, ProcmonEvent_t* event)
 	
 	FreeScratchArena(scratch);
 }
+
+#endif //PROCMON_SUPPORTED

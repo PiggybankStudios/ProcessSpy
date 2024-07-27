@@ -26,22 +26,7 @@ ResourcePool_t* GameGetCurrentResourcePool() //pre-declared in game_main.h
 #define Debug_Test_Desc "Serves as a dedicated spot to place temporary test code"
 void Debug_Test()
 {
-	// Unimplemented(); //TODO: Implement me!
-	PrintLine_D("IRP_MJ_ACQUIRE_FOR_SECTION_SYNCHRONIZATION = 0x%X (%d)", IRP_MJ_ACQUIRE_FOR_SECTION_SYNCHRONIZATION);
-	PrintLine_D("IRP_MJ_RELEASE_FOR_SECTION_SYNCHRONIZATION = 0x%X (%d)", IRP_MJ_RELEASE_FOR_SECTION_SYNCHRONIZATION);
-	PrintLine_D("IRP_MJ_ACQUIRE_FOR_MOD_WRITE = 0x%X (%d)", IRP_MJ_ACQUIRE_FOR_MOD_WRITE);
-	PrintLine_D("IRP_MJ_RELEASE_FOR_MOD_WRITE = 0x%X (%d)", IRP_MJ_RELEASE_FOR_MOD_WRITE);
-	PrintLine_D("IRP_MJ_ACQUIRE_FOR_CC_FLUSH = 0x%X (%d)", IRP_MJ_ACQUIRE_FOR_CC_FLUSH);
-	PrintLine_D("IRP_MJ_RELEASE_FOR_CC_FLUSH = 0x%X (%d)", IRP_MJ_RELEASE_FOR_CC_FLUSH);
-	PrintLine_D("IRP_MJ_QUERY_OPEN = 0x%X (%d)", IRP_MJ_QUERY_OPEN);
-	PrintLine_D("IRP_MJ_FAST_IO_CHECK_IF_POSSIBLE = 0x%X (%d)", IRP_MJ_FAST_IO_CHECK_IF_POSSIBLE);
-	PrintLine_D("IRP_MJ_NETWORK_QUERY_OPEN = 0x%X (%d)", IRP_MJ_NETWORK_QUERY_OPEN);
-	PrintLine_D("IRP_MJ_MDL_READ = 0x%X (%d)", IRP_MJ_MDL_READ);
-	PrintLine_D("IRP_MJ_MDL_READ_COMPLETE = 0x%X (%d)", IRP_MJ_MDL_READ_COMPLETE);
-	PrintLine_D("IRP_MJ_PREPARE_MDL_WRITE = 0x%X (%d)", IRP_MJ_PREPARE_MDL_WRITE);
-	PrintLine_D("IRP_MJ_MDL_WRITE_COMPLETE = 0x%X (%d)", IRP_MJ_MDL_WRITE_COMPLETE);
-	PrintLine_D("IRP_MJ_VOLUME_MOUNT = 0x%X (%d)", IRP_MJ_VOLUME_MOUNT);
-	PrintLine_D("IRP_MJ_VOLUME_DISMOUNT = 0x%X (%d)", IRP_MJ_VOLUME_DISMOUNT);
+	Unimplemented(); //TODO: Implement me!
 }
 EXPRESSION_FUNC_DEFINITION(Debug_Test_Glue) { Debug_Test(); return NewExpValueVoid(); }
 

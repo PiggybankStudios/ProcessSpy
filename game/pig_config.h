@@ -14,7 +14,7 @@ Description:
 
 //NOTE: These must be 1/0 (not true/false) so the batch file can parse them properly
 
-#define DEBUG_BUILD         0
+#define DEBUG_BUILD         1
 #define ASSERTIONS_ENABLED  1
 #define RUN_PIG_GEN         1
 
@@ -27,7 +27,7 @@ Description:
 #define VULKAN_SUPPORTED    0
 #define DIRECTX_SUPPORTED   0
 
-#define PROCMON_SUPPORTED   1
+#define PROCMON_SUPPORTED   0
 #define SOCKETS_SUPPORTED   1
 #define BOX2D_SUPPORTED     0
 #define SLUG_SUPPORTED      0

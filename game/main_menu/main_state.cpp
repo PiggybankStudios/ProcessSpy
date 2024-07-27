@@ -7,6 +7,7 @@ Description:
 */
 
 #include "ui/ui_scroll_view.cpp"
+#include "ui/ui_divider.cpp"
 
 #include "main_menu/main_helpers.cpp"
 
@@ -186,12 +187,14 @@ void MoveToPath(MyStr_t newPath)
 	}
 	FreeString(mainHeap, &oldPath);
 	
+	#if PROCMON_SUPPORTED
 	if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
 	{
 		FreeString(mainHeap, &gl->procmon.eventPathFilter);
 		gl->procmon.eventPathFilter = AllocString(mainHeap, &main->currentPath);
 		plat->UnlockMutex(&gl->procmon.mutex);
 	}
+	#endif
 }
 
 // +--------------------------------------------------------------+
@@ -217,11 +220,10 @@ void StartMainAppState(AppState_t oldAppState, bool initialize)
 	{
 		ClearPointer(main);
 		
-		main->sidebarWidth = ScreenSize.width * 0.25f;
-		if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
-		main->userSetSidebarWidth = main->sidebarWidth;
-		
 		CreateVarArray(&main->items, mainHeap, sizeof(FolderFileItem_t));
+		InitUiDivider(&main->sidebarDivider, true, true, 0.25f, ScreenRec);
+		main->sidebarDivider.minLeftSizePx = MIN_SIDEBAR_WIDTH;
+		main->sidebarDivider.minRightSizePx = MIN_VIEWPORT_WIDTH;
 		InitUiScrollView(&main->viewportScroll);
 		InitFileIconCache(&main->iconCache, mainHeap);
 		
@@ -265,14 +267,10 @@ void LayoutMainAppState()
 {
 	RcBindFont(&pig->resources.fonts->files, SelectDefaultFontFace());
 	
-	main->sidebarRec = NewRec(PANEL_MARGIN, PANEL_MARGIN, main->sidebarWidth - (PANEL_DIVIDER_WIDTH/2.0f), ScreenSize.height - PANEL_MARGIN*2);
-	RecAlign(&main->sidebarRec);
-	main->dividerRec = NewRec(main->sidebarRec.x + main->sidebarRec.width, 0, PANEL_DIVIDER_WIDTH, ScreenSize.height);
-	RecAlign(&main->dividerRec);
-	
-	main->viewportRec = NewRec(main->dividerRec.x + main->dividerRec.width, PANEL_MARGIN, 0, 0);
-	main->viewportRec.width = (ScreenSize.width - PANEL_MARGIN) - main->viewportRec.x;
-	RecAlign(&main->viewportRec);
+	main->sidebarDivider.mainRec = ScreenRec;
+	LayoutUiDivider(&main->sidebarDivider);
+	rec sidebarRec = main->sidebarDivider.leftRec + main->sidebarDivider.mainRec.topLeft;
+	main->viewportRec = main->sidebarDivider.rightRec + main->sidebarDivider.mainRec.topLeft;
 	
 	main->topbarRec = main->viewportRec;
 	main->topbarRec.height = TOPBAR_HEIGHT;
@@ -304,14 +302,14 @@ void LayoutMainAppState()
 	
 	if (!platInfo->wasRunInAdministratorMode)
 	{
-		v2 adminTextPos = NewVec2(main->sidebarRec.x + 5, main->sidebarRec.y + 5 + RcGetMaxAscend());
+		v2 adminTextPos = NewVec2(sidebarRec.x + 5, sidebarRec.y + 5 + RcGetMaxAscend());
 		Vec2Align(&adminTextPos);
-		r32 adminTextMaxWidth = main->sidebarRec.x + main->sidebarRec.width - adminTextPos.x;
+		r32 adminTextMaxWidth = sidebarRec.x + sidebarRec.width - adminTextPos.x;
 		TextMeasure_t adminTextMeasure = RcMeasureText(NewStr(RESTART_IN_ADMIN_MODE_MESSAGE), adminTextMaxWidth);
 		
-		main->restartWithAdminBtnRec.width = main->sidebarRec.width - 5*2;
+		main->restartWithAdminBtnRec.width = sidebarRec.width - 5*2;
 		main->restartWithAdminBtnRec.height = 200;
-		main->restartWithAdminBtnRec.topLeft = main->sidebarRec.topLeft + main->sidebarRec.size/2 - main->restartWithAdminBtnRec.size/2;
+		main->restartWithAdminBtnRec.topLeft = sidebarRec.topLeft + sidebarRec.size/2 - main->restartWithAdminBtnRec.size/2;
 		if (main->restartWithAdminBtnRec.y < adminTextPos.y + adminTextMeasure.size.height - adminTextMeasure.offset.y)
 		{
 			main->restartWithAdminBtnRec.y = adminTextPos.y + adminTextMeasure.size.height - adminTextMeasure.offset.y;
@@ -324,11 +322,10 @@ void LayoutMainAppState()
 
 void CaptureMouseMainAppState()
 {
-	if (main->resizingSidebar) { MouseHitNamed("Divider"); }
+	UiDividerCaptureMouse(&main->sidebarDivider);
 	MouseHitRecNamed(RecInflate(main->backBtnRec, INTER_BTN_MARGIN/2, 0), "BackBtn");
 	MouseHitRecNamed(RecInflate(main->forwardBtnRec, INTER_BTN_MARGIN/2, 0), "ForwardBtn");
 	MouseHitRecNamed(RecInflate(main->upBtnRec, INTER_BTN_MARGIN/2, 0), "UpBtn");
-	MouseHitRecNamed(RecInflate(main->dividerRec, 2, 0), "Divider");
 	if (main->viewportScroll.scrollMax.x > main->viewportScroll.scrollMin.x)
 	{
 		MouseHitRecNamed(main->viewportScroll.horiScrollBarRec, "ViewportHoriScrollBar");
@@ -354,7 +351,6 @@ void CaptureMouseMainAppState()
 		}
 	}
 	MouseHitRecNamed(RecInflate(main->viewportRec, PANEL_MARGIN, PANEL_MARGIN), "Viewport");
-	MouseHitRecNamed(RecInflate(main->sidebarRec, PANEL_MARGIN, PANEL_MARGIN), "Sidebar");
 }
 
 // +--------------------------------------------------------------+
@@ -377,49 +373,7 @@ void UpdateMainAppState()
 		UpdateFolderFileItemsAtCurrentPath();
 	}
 	
-	// +==============================+
-	// |     Handle Window Resize     |
-	// +==============================+
-	if (pig->currentWindow->input.resized)
-	{
-		if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
-		if (main->sidebarWidth < main->userSetSidebarWidth) { main->sidebarWidth = main->userSetSidebarWidth; }
-		if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH)
-		{
-			main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH;
-			if (main->sidebarWidth < 10) { main->sidebarWidth = 10; }
-		}
-	}
-	
-	// +==================================+
-	// | Handle Divider Mouse Interaction |
-	// +==================================+
-	if (IsMouseOverNamed("Divider"))
-	{
-		pigOut->cursorType = PlatCursor_ResizeHorizontal;
-		
-		if (main->resizingSidebar)
-		{
-			HandleMouse(MouseBtn_Left);
-			if (MouseDownRaw(MouseBtn_Left))
-			{
-				main->sidebarWidth = MousePos.x - main->resizingSidebarGrabOffset;
-				main->userSetSidebarWidth = main->sidebarWidth;
-				if (main->sidebarWidth < MIN_SIDEBAR_WIDTH) { main->sidebarWidth = MIN_SIDEBAR_WIDTH; }
-				else if (main->sidebarWidth > ScreenSize.width - MIN_VIEWPORT_WIDTH) { main->sidebarWidth = ScreenSize.width - MIN_VIEWPORT_WIDTH; }
-			}
-			else
-			{
-				main->resizingSidebar = false;
-			}
-		}
-		else if (MousePressed(MouseBtn_Left))
-		{
-			HandleMouse(MouseBtn_Left);
-			main->resizingSidebar = true;
-			main->resizingSidebarGrabOffset = MousePos.x - main->sidebarWidth;
-		}
-	}
+	UpdateUiDivider(&main->sidebarDivider);
 	
 	// +==============================+
 	// |        Handle Buttons        |
@@ -541,6 +495,7 @@ void UpdateMainAppState()
 	// +==============================+
 	// |  Consume Item Access Events  |
 	// +==============================+
+	#if PROCMON_SUPPORTED
 	if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
 	{
 		VarArrayLoop(&gl->procmon.itemEvents, eIndex)
@@ -571,6 +526,7 @@ void UpdateMainAppState()
 		
 		plat->UnlockMutex(&gl->procmon.mutex);
 	}
+	#endif
 	
 	// +==============================+
 	// |         Update Items         |
@@ -679,14 +635,15 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// +==============================+
 	// |        Render Panels         |
 	// +==============================+
-	RcDrawRectangle(main->sidebarRec, PANEL_BACK_COLOR);
-	RcDrawRectangleOutline(main->sidebarRec, PANEL_OUTLINE_COLOR, 1);
+	rec sidebarRec = main->sidebarDivider.leftRec + main->sidebarDivider.mainRec.topLeft;
+	RcDrawRectangle(sidebarRec, PANEL_BACK_COLOR);
+	RcDrawRectangleOutline(sidebarRec, PANEL_OUTLINE_COLOR, 1);
 	
 	RcDrawRectangle(main->viewportRec, PANEL_BACK_COLOR);
 	
 	RcDrawRectangle(main->topbarRec, PANEL_BACK_COLOR);
 	
-	RcDrawRectangle(main->dividerRec, DIVIDER_COLOR);
+	RenderUiDivider(&main->sidebarDivider, DIVIDER_COLOR);
 	
 	// +==============================+
 	// |         Render Items         |
@@ -790,10 +747,12 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// +==============================+
 	// |     Render Process Items     |
 	// +==============================+
+	#if PROCMON_SUPPORTED
 	if (platInfo->wasRunInAdministratorMode)
 	{
-		RcSetViewport(main->sidebarRec);
-		rec iconRec = NewRec(main->sidebarRec.topLeft + NewVec2(5, 5), 32, 32);
+		rec sidebarRec = main->sidebarDivider.leftRec + main->sidebarDivider.mainRec.topLeft;
+		RcSetViewport(sidebarRec);
+		rec iconRec = NewRec(sidebarRec.topLeft + NewVec2(5, 5), 32, 32);
 		for (u64 pIndex = 0; pIndex < gl->procmon.processes.length; pIndex++)
 		{
 			if (plat->LockMutex(&gl->procmon.mutex, MUTEX_LOCK_INFINITE))
@@ -862,6 +821,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 		RcBindSpriteSheet(&pig->resources.sheets->buttonIcons);
 		RcDrawSheetFrame(NewVec2i(1, 1), shieldIconRec, White);
 	}
+	#endif
 	
 	// +==============================+
 	// |      Render ScrollBars       |

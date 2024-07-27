@@ -30,7 +30,9 @@ struct AppStateStructs_t
 
 struct AppGlobals_t
 {
+	#if PROCMON_SUPPORTED
 	ProcmonInfo_t procmon;
+	#endif
 };
 
 static AppGlobals_t*   gl   = nullptr;
