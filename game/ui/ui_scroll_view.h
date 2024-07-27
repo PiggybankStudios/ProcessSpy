@@ -16,6 +16,7 @@ typedef SCROLL_VIEW_CONTENT_SIZE_DEFINITION(ScrollViewContentSize_f);
 
 struct ScrollView_t
 {
+	u64 id;
 	void* contextPntr;
 	rec contentRec;
 	v2 scrollMin;

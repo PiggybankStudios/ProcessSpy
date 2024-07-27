@@ -221,7 +221,7 @@ void StartMainAppState(AppState_t oldAppState, bool initialize)
 		ClearPointer(main);
 		
 		CreateVarArray(&main->items, mainHeap, sizeof(FolderFileItem_t));
-		InitUiDivider(&main->sidebarDivider, true, false, 0.25f, ScreenRec);
+		InitUiDivider(&main->sidebarDivider, true, false, ScreenSize.width*0.25f, ScreenRec);
 		main->sidebarDivider.minLeftSizePx = MIN_SIDEBAR_WIDTH;
 		main->sidebarDivider.minRightSizePx = MIN_VIEWPORT_WIDTH;
 		InitUiScrollView(&main->viewportScroll);
@@ -317,7 +317,7 @@ void LayoutMainAppState()
 		RecAlign(&main->restartWithAdminBtnRec);
 	}
 	
-	UpdateScrollViewMainRec(&main->viewportScroll, main->viewportRec, MainContentSizeFunc);
+	MoveUiScrollView(&main->viewportScroll, main->viewportRec, MainContentSizeFunc);
 }
 
 void CaptureMouseMainAppState()
@@ -326,16 +326,7 @@ void CaptureMouseMainAppState()
 	MouseHitRecNamed(RecInflate(main->backBtnRec, INTER_BTN_MARGIN/2, 0), "BackBtn");
 	MouseHitRecNamed(RecInflate(main->forwardBtnRec, INTER_BTN_MARGIN/2, 0), "ForwardBtn");
 	MouseHitRecNamed(RecInflate(main->upBtnRec, INTER_BTN_MARGIN/2, 0), "UpBtn");
-	if (main->viewportScroll.scrollMax.x > main->viewportScroll.scrollMin.x)
-	{
-		MouseHitRecNamed(main->viewportScroll.horiScrollBarRec, "ViewportHoriScrollBar");
-		MouseHitRecNamed(main->viewportScroll.horiScrollGutterRec, "ViewportHoriScrollGutter");
-	}
-	if (main->viewportScroll.scrollMax.y > main->viewportScroll.scrollMin.y)
-	{
-		MouseHitRecNamed(main->viewportScroll.vertScrollBarRec, "ViewportVertScrollBar");
-		MouseHitRecNamed(main->viewportScroll.vertScrollGutterRec, "ViewportVertScrollGutter");
-	}
+	UiScrollViewCaptureMouse(&main->viewportScroll);
 	if (!platInfo->wasRunInAdministratorMode)
 	{
 		MouseHitRecNamed(main->restartWithAdminBtnRec, "SidebarRestartWithAdminBtn");
@@ -421,7 +412,7 @@ void UpdateMainAppState()
 		}
 	}
 	
-	UpdateScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"), IsMouseOverNamed("ViewportHoriScrollBar"), IsMouseOverNamed("ViewportVertScrollBar"));
+	UpdateUiScrollView(&main->viewportScroll, IsMouseOverNamedPartial("Viewport"));
 	
 	// +==============================+
 	// |      Scroll to Selected      |
@@ -748,7 +739,6 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	#if PROCMON_SUPPORTED
 	if (platInfo->wasRunInAdministratorMode)
 	{
-		rec sidebarRec = main->sidebarDivider.leftRec + main->sidebarDivider.mainRec.topLeft;
 		RcSetViewport(sidebarRec);
 		rec iconRec = NewRec(sidebarRec.topLeft + NewVec2(5, 5), 32, 32);
 		for (u64 pIndex = 0; pIndex < gl->procmon.processes.length; pIndex++)
@@ -791,9 +781,9 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	else
 	{
 		bool isMouseOverBtn = IsMouseOverNamed("SidebarRestartWithAdminBtn");
-		v2 adminTextPos = NewVec2(main->sidebarRec.x + 5, main->sidebarRec.y + 5 + RcGetMaxAscend());
+		v2 adminTextPos = NewVec2(sidebarRec.x + 5, sidebarRec.y + 5 + RcGetMaxAscend());
 		Vec2Align(&adminTextPos);
-		r32 adminTextMaxWidth = main->sidebarRec.x + main->sidebarRec.width - adminTextPos.x;
+		r32 adminTextMaxWidth = sidebarRec.x + sidebarRec.width - adminTextPos.x;
 		RcDrawText(RESTART_IN_ADMIN_MODE_MESSAGE,
 			adminTextPos,
 			TEXT_COLOR,
@@ -825,7 +815,7 @@ void RenderMainAppState(FrameBuffer_t* renderBuffer, bool bottomLayer)
 	// |      Render ScrollBars       |
 	// +==============================+
 	RcDrawRectangleOutline(main->viewportRec, PANEL_OUTLINE_COLOR, 1);
-	RenderScrollView(&main->viewportScroll, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
+	RenderUiScrollView(&main->viewportScroll, DIVIDER_COLOR, HEADER_BACK_COLOR, HIGHLIGHT_COLOR);
 	
 	// +==============================+
 	// |    Render Topbar Buttons     |
